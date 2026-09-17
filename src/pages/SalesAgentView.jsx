@@ -14,7 +14,7 @@ const SalesAgentView = () => {
     const fetchLeads = async () => {
       try {
         const response = await fetch(
-          "https://major-project-two-backend-zeta.vercel.app/leads"
+          "https://major-project-two-backend-zeta.vercel.app/leads",
         );
 
         const data = await response.json();
@@ -35,13 +35,13 @@ const SalesAgentView = () => {
     const fetchAgents = async () => {
       try {
         const response = await fetch(
-          "https://major-project-two-backend-zeta.vercel.app/sales-agents"
+          "https://major-project-two-backend-zeta.vercel.app/sales-agents",
         );
 
         const data = await response.json();
 
         if (response.ok) {
-          setAgents(data.agents || []);
+          setAgents(data.salesAgents || []);
         }
       } catch (error) {
         console.error("Error fetching agents:", error);
@@ -56,7 +56,7 @@ const SalesAgentView = () => {
     const fetchTags = async () => {
       try {
         const response = await fetch(
-          "https://major-project-two-backend-zeta.vercel.app/tags"
+          "https://major-project-two-backend-zeta.vercel.app/tags",
         );
 
         const data = await response.json();
@@ -74,13 +74,9 @@ const SalesAgentView = () => {
 
   // Filter leads
   const filteredLeads = leads.filter((lead) => {
-    const statusMatches =
-      !selectedStatus ||
-      lead.status === selectedStatus;
+    const statusMatches = !selectedStatus || lead.status === selectedStatus;
 
-    const tagMatches =
-      !selectedTag ||
-      lead.tags?.includes(selectedTag);
+    const tagMatches = !selectedTag || lead.tags?.includes(selectedTag);
 
     return statusMatches && tagMatches;
   });
@@ -99,8 +95,7 @@ const SalesAgentView = () => {
       };
 
       return (
-        (priorityOrder[a.priority] || 2) -
-        (priorityOrder[b.priority] || 2)
+        (priorityOrder[a.priority] || 2) - (priorityOrder[b.priority] || 2)
       );
     }
 
@@ -108,48 +103,29 @@ const SalesAgentView = () => {
   });
 
   // Statuses
-  const statuses = [
-    "New",
-    "Contacted",
-    "Qualified",
-    "Proposal Sent",
-    "Closed",
-  ];
+  const statuses = ["New", "Contacted", "Qualified", "Proposal Sent", "Closed"];
 
   console.log("Tags:", tags);
 
   return (
     <div className="container mt-4">
-
-      <h2 className="mb-4">
-        Sales Agent View
-      </h2>
+      <h2 className="mb-4">Sales Agent View</h2>
 
       {/* Filters and Sorting */}
       <div className="row mb-4">
-
         {/* Status Filter */}
         <div className="col-md-4">
-          <label className="form-label">
-            Filter by Status
-          </label>
+          <label className="form-label">Filter by Status</label>
 
           <select
             className="form-select"
             value={selectedStatus}
-            onChange={(event) =>
-              setSelectedStatus(event.target.value)
-            }
+            onChange={(event) => setSelectedStatus(event.target.value)}
           >
-            <option value="">
-              All Statuses
-            </option>
+            <option value="">All Statuses</option>
 
             {statuses.map((status) => (
-              <option
-                key={status}
-                value={status}
-              >
+              <option key={status} value={status}>
                 {status}
               </option>
             ))}
@@ -158,26 +134,17 @@ const SalesAgentView = () => {
 
         {/* Tag Filter */}
         <div className="col-md-4">
-          <label className="form-label">
-            Filter by Tag
-          </label>
+          <label className="form-label">Filter by Tag</label>
 
           <select
             className="form-select"
             value={selectedTag}
-            onChange={(event) =>
-              setSelectedTag(event.target.value)
-            }
+            onChange={(event) => setSelectedTag(event.target.value)}
           >
-            <option value="">
-              All Tags
-            </option>
+            <option value="">All Tags</option>
 
             {tags.map((tag) => (
-              <option
-                key={tag._id}
-                value={tag.name}
-              >
+              <option key={tag._id} value={tag.name}>
                 {tag.name}
               </option>
             ))}
@@ -186,57 +153,38 @@ const SalesAgentView = () => {
 
         {/* Sort */}
         <div className="col-md-4">
-          <label className="form-label">
-            Sort Leads By
-          </label>
+          <label className="form-label">Sort Leads By</label>
 
           <select
             className="form-select"
             value={sortBy}
-            onChange={(event) =>
-              setSortBy(event.target.value)
-            }
+            onChange={(event) => setSortBy(event.target.value)}
           >
-            <option value="">
-              Default
-            </option>
+            <option value="">Default</option>
 
-            <option value="status">
-              Status
-            </option>
+            <option value="status">Status</option>
 
-            <option value="priority">
-              Priority
-            </option>
+            <option value="priority">Priority</option>
           </select>
         </div>
-
       </div>
 
       {/* Sales Agent Columns */}
       <div className="row">
-
         {agents.map((agent) => {
-
           // Leads belonging to current agent
-          const agentLeads = sortedLeads.filter(
-            (lead) =>
-              lead.salesAgent?._id === agent._id
+          const agentLeads = sortedLeads.filter((lead) =>
+            lead.salesAgents?.some(
+              (assignedAgent) => assignedAgent._id === agent._id,
+            ),
           );
 
           return (
-            <div
-              className="col-md-6 col-lg-4 mb-4"
-              key={agent._id}
-            >
-
+            <div className="col-md-6 col-lg-4 mb-4" key={agent._id}>
               <div className="card h-100">
-
                 {/* Agent Header */}
                 <div className="card-header">
-                  <strong>
-                    {agent.name}
-                  </strong>
+                  <strong>{agent.name}</strong>
 
                   <span className="badge bg-secondary float-end">
                     {agentLeads.length} Leads
@@ -245,72 +193,42 @@ const SalesAgentView = () => {
 
                 {/* Agent Leads */}
                 <div className="card-body">
-
                   {agentLeads.length === 0 ? (
-                    <p className="text-muted">
-                      No leads
-                    </p>
+                    <p className="text-muted">No leads</p>
                   ) : (
                     agentLeads.map((lead) => (
-
-                      <div
-                        key={lead._id}
-                        className="card mb-3"
-                      >
-
+                      <div key={lead._id} className="card mb-3">
                         <div className="card-body">
-
-                          <h6 className="card-title">
-                            {lead.name}
-                          </h6>
+                          <h6 className="card-title">{lead.name}</h6>
 
                           <p className="mb-1">
-                            <strong>
-                              Status:
-                            </strong>{" "}
-                            {lead.status}
+                            <strong>Status:</strong> {lead.status}
                           </p>
 
                           <p className="mb-1">
-                            <strong>
-                              Time to Close:
-                            </strong>{" "}
-                            {lead.timeToClose} days
+                            <strong>Time to Close:</strong> {lead.timeToClose}{" "}
+                            days
                           </p>
 
                           <p className="mb-1">
-                            <strong>
-                              Priority:
-                            </strong>{" "}
-                            {lead.priority ||
-                              "Medium"}
+                            <strong>Priority:</strong>{" "}
+                            {lead.priority || "Medium"}
                           </p>
 
                           <p className="mb-0">
-                            <strong>
-                              Tags:
-                            </strong>{" "}
-                            {lead.tags?.join(", ") ||
-                              "No tags"}
+                            <strong>Tags:</strong>{" "}
+                            {lead.tags?.join(", ") || "No tags"}
                           </p>
-
                         </div>
-
                       </div>
-
                     ))
                   )}
-
                 </div>
-
               </div>
-
             </div>
           );
         })}
-
       </div>
-
     </div>
   );
 };
