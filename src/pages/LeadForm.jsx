@@ -18,7 +18,7 @@ const LeadForm = () => {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const response = await fetch("http://localhost:5000/sales-agents");
+        const response = await fetch("https://major-project-two-backend-zeta.vercel.app/sales-agents");
 
         const data = await response.json();
 
@@ -37,7 +37,7 @@ const LeadForm = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await fetch("http://localhost:5000/tags");
+        const response = await fetch("https://major-project-two-backend-zeta.vercel.app/tags");
 
         const data = await response.json();
 
@@ -80,7 +80,7 @@ const LeadForm = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/leads", {
+      const response = await fetch("https://major-project-two-backend-zeta.vercel.app/leads", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

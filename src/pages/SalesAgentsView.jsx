@@ -11,7 +11,7 @@ const SalesAgentsView = () => {
     const fetchAgents = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/sales-agents"
+          "https://major-project-two-backend-zeta.vercel.app/sales-agents"
         );
 
         const data = await response.json();

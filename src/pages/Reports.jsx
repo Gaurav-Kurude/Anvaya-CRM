@@ -17,7 +17,7 @@ const Reports = () => {
   const [leads, setLeads] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/leads")
+    fetch("https://major-project-two-backend-zeta.vercel.app/leads")
       .then((response) => response.json())
       .then((data) => {
         setLeads(data.leads || []);

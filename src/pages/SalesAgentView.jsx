@@ -14,7 +14,7 @@ const SalesAgentView = () => {
     const fetchLeads = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/leads"
+          "https://major-project-two-backend-zeta.vercel.app/leads"
         );
 
         const data = await response.json();
@@ -35,7 +35,7 @@ const SalesAgentView = () => {
     const fetchAgents = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/sales-agents"
+          "https://major-project-two-backend-zeta.vercel.app/sales-agents"
         );
 
         const data = await response.json();
@@ -56,7 +56,7 @@ const SalesAgentView = () => {
     const fetchTags = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/tags"
+          "https://major-project-two-backend-zeta.vercel.app/tags"
         );
 
         const data = await response.json();

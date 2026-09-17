@@ -11,7 +11,7 @@ const LeadStatusView = () => {
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const response = await fetch("http://localhost:5000/leads");
+        const response = await fetch("https://major-project-two-backend-zeta.vercel.app/leads");
 
         const data = await response.json();
 
@@ -33,7 +33,7 @@ const LeadStatusView = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await fetch("http://localhost:5000/tags");
+        const response = await fetch("https://major-project-two-backend-zeta.vercel.app/tags");
         const data = await response.json();
 
         console.log("Tags API response:", data);

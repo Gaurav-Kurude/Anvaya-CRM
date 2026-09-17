@@ -11,7 +11,7 @@ const Dashboard = () => {
     const fetchLeads = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/leads"
+          "https://major-project-two-backend-zeta.vercel.app/leads"
         );
 
         const data = await response.json();

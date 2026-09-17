@@ -17,7 +17,7 @@ const LeadDetailsView = () => {
     const fetchLead = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/leads/${leadId}`
+          `https://major-project-two-backend-zeta.vercel.app/leads/${leadId}`
         );
 
         const data = await response.json();
@@ -42,7 +42,7 @@ const LeadDetailsView = () => {
     const fetchComments = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/lead/${leadId}`
+          `https://major-project-two-backend-zeta.vercel.app/lead/${leadId}`
         );
 
         const data = await response.json();
@@ -72,7 +72,7 @@ const LeadDetailsView = () => {
       setCommentLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/addcomment",
+        "https://major-project-two-backend-zeta.vercel.app/addcomment",
         {
           method: "POST",
           headers: {

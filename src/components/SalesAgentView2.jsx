@@ -11,7 +11,7 @@ const SalesAgentView = () => {
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const response = await fetch("http://localhost:5000/leads");
+        const response = await fetch("https://major-project-two-backend-zeta.vercel.app/leads");
         const data = await response.json();
 
         console.log("Leads API response:", data);

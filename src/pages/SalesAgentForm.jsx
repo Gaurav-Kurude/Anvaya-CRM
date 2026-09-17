@@ -13,7 +13,7 @@ const SalesAgentForm = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/sales-agents", {
+      const response = await fetch("https://major-project-two-backend-zeta.vercel.app/sales-agents", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

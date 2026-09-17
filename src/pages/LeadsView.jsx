@@ -18,8 +18,8 @@ const LeadsView = () => {
     const fetchData = async () => {
       try {
         const [leadsResponse, agentsResponse] = await Promise.all([
-          fetch("http://localhost:5000/leads"),
-          fetch("http://localhost:5000/sales-agents"),
+          fetch("https://major-project-two-backend-zeta.vercel.app/leads"),
+          fetch("https://major-project-two-backend-zeta.vercel.app/sales-agents"),
         ]);
 
         const leadsData = await leadsResponse.json();

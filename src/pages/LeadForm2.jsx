@@ -24,8 +24,8 @@ const LeadForm = () => {
     const fetchData = async () => {
       try {
         const [agentsResponse, tagsResponse] = await Promise.all([
-          fetch("http://localhost:5000/sales-agents"),
-          fetch("http://localhost:5000/tags"),
+          fetch("https://major-project-two-backend-zeta.vercel.app/sales-agents"),
+          fetch("https://major-project-two-backend-zeta.vercel.app/tags"),
         ]);
 
         const agentsData = await agentsResponse.json();
@@ -87,7 +87,7 @@ const LeadForm = () => {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/leads",
+        "https://major-project-two-backend-zeta.vercel.app/leads",
         {
           method: "POST",
           headers: {
