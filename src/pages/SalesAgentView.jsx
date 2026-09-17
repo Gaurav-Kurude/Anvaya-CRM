@@ -116,6 +116,8 @@ const SalesAgentView = () => {
     "Closed",
   ];
 
+  console.log("Tags:", tags);
+
   return (
     <div className="container mt-4">
 
