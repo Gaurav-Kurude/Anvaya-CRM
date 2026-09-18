@@ -11,7 +11,7 @@ const SalesAgentsView = () => {
     const fetchAgents = async () => {
       try {
         const response = await fetch(
-          "https://major-project-two-backend-zeta.vercel.app/sales-agents"
+          "https://major-project-two-backend-zeta.vercel.app/sales-agents",
         );
 
         const data = await response.json();
@@ -23,8 +23,6 @@ const SalesAgentsView = () => {
         }
       } catch (error) {
         console.error("Error fetching sales agents:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -65,17 +63,12 @@ const SalesAgentsView = () => {
             {loading ? (
               <p>Loading agents...</p>
             ) : agents.length === 0 ? (
-              <p>No sales agents found.</p>
+              <p className="text-muted">No sales agents found.</p>
             ) : (
               agents.map((agent) => (
-                <div
-                  key={agent._id}
-                  className="border rounded p-3 mb-3"
-                >
+                <div key={agent._id} className="border rounded p-3 mb-3">
                   <h5 className="mb-1">{agent.name}</h5>
-                  <p className="mb-0 text-muted">
-                    {agent.email}
-                  </p>
+                  <p className="mb-0 text-muted">{agent.email}</p>
                 </div>
               ))
             )}

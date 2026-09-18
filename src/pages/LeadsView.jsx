@@ -6,7 +6,7 @@ const LeadsView = () => {
 
   const [leads, setLeads] = useState([]);
   const [agents, setAgents] = useState([]);
-
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [agentFilter, setAgentFilter] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -89,8 +89,25 @@ const LeadsView = () => {
   return (
     <div className="container-fluid">
       <div className="row min-vh-100">
+        <button
+          className="btn btn-primary d-md-none m-3"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          ☰
+        </button>
         {/* Sidebar */}
-        <div className="col-md-3 col-lg-2 bg-light p-4">
+        <div
+          className={`sidebar col-md-3 col-lg-2 bg-light p-4 ${
+            sidebarOpen ? "sidebar-open" : ""
+          }`}
+        >
+          {/* Mobile Close Button */}
+          <button
+            className="btn btn-sm btn-outline-secondary d-md-none mb-3"
+            onClick={() => setSidebarOpen(false)}
+          >
+            ✕ Close
+          </button>
           <h4 className="mb-4">Anvaya CRM</h4>
 
           <button
@@ -98,6 +115,16 @@ const LeadsView = () => {
             onClick={() => navigate("/")}
           >
             Back to Dashboard
+          </button>
+          {/* All Leads */}
+          <button
+            className="btn btn-outline-secondary w-100"
+            onClick={() => {
+              setSidebarOpen(false);
+              navigate("/leads");
+            }}
+          >
+            All Leads
           </button>
         </div>
 
