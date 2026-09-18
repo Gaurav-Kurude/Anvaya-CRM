@@ -23,6 +23,7 @@ ChartJS.register(
 
 const ReportsView = () => {
   const [leads, setLeads] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Fetch all leads
   useEffect(() => {

@@ -15,6 +15,7 @@ import {
 
 const Reports = () => {
   const [leads, setLeads] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetch("https://major-project-two-backend-zeta.vercel.app/leads")
@@ -95,13 +96,40 @@ const Reports = () => {
   return (
     <div className="container-fluid">
       <div className="row">
+        <button
+          className="btn btn-primary d-md-none m-3"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          ☰
+        </button>
         {/* Sidebar */}
-        <div className="col-md-3 col-lg-2 bg-light min-vh-100 p-3">
-          <h5 className="mb-4">Anvaya CRM</h5>
+        <div
+          className={`sidebar col-md-3 col-lg-2 bg-light p-4 ${
+            sidebarOpen ? "sidebar-open" : ""
+          }`}
+        >
+          {/* Mobile Close Button */}
+          <button
+            className="btn btn-sm btn-outline-secondary d-md-none mb-3"
+            onClick={() => setSidebarOpen(false)}
+          >
+            ✕ Close
+          </button>
+
+          <h4 className="mb-4">Anvaya CRM</h4>
 
           <a href="/" className="btn btn-outline-primary w-100">
             ← Back to Dashboard
           </a>
+          <button
+            className="btn btn-outline-secondary w-100"
+            onClick={() => {
+              setSidebarOpen(false);
+              navigate("/leads");
+            }}
+          >
+            All Leads
+          </button>
         </div>
 
         {/* Main Content */}
