@@ -42,7 +42,7 @@ const LeadDetailsView = () => {
     const fetchComments = async () => {
       try {
         const response = await fetch(
-          `https://major-project-two-backend-zeta.vercel.app/lead/${leadId}`
+          `https://major-project-two-backend-zeta.vercel.app/leads/${leadId}/comments`
         );
 
         const data = await response.json();
@@ -80,7 +80,7 @@ const LeadDetailsView = () => {
           },
           body: JSON.stringify({
             lead: leadId,
-            author: lead.salesAgents?._id,
+            author: lead.salesAgent?._id,
             commentText: newComment,
           }),
         }
@@ -231,7 +231,7 @@ const LeadDetailsView = () => {
               <button
                 className="btn btn-primary mt-2"
                 onClick={() =>
-                  navigate(`/leads/${leadId}/edit`)
+                  navigate(`/leads/edit/${leadId}`)
                 }
               >
                 Edit Lead Details
