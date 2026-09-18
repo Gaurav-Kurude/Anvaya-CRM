@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const LeadForm = () => {
   const [agents, setAgents] = useState([]);
   const [tags, setTags] = useState([]);
@@ -18,7 +18,9 @@ const LeadForm = () => {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const response = await fetch("https://major-project-two-backend-zeta.vercel.app/sales-agents");
+        const response = await fetch(
+          "https://major-project-two-backend-zeta.vercel.app/sales-agents",
+        );
 
         const data = await response.json();
 
@@ -37,7 +39,9 @@ const LeadForm = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await fetch("https://major-project-two-backend-zeta.vercel.app/tags");
+        const response = await fetch(
+          "https://major-project-two-backend-zeta.vercel.app/tags",
+        );
 
         const data = await response.json();
 
@@ -80,21 +84,24 @@ const LeadForm = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch("https://major-project-two-backend-zeta.vercel.app/leads", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://major-project-two-backend-zeta.vercel.app/leads",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            source: formData.source,
+            salesAgent: formData.salesAgent,
+            status: formData.status,
+            tags: formData.tags,
+            timeToClose: Number(formData.timeToClose),
+            priority: formData.priority,
+          }),
         },
-        body: JSON.stringify({
-          name: formData.name,
-          source: formData.source,
-          salesAgent: formData.salesAgent,
-          status: formData.status,
-          tags: formData.tags,
-          timeToClose: Number(formData.timeToClose),
-          priority: formData.priority,
-        }),
-      });
+      );
 
       const data = await response.json();
 
@@ -121,8 +128,17 @@ const LeadForm = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="container mt-4">
+      <button
+        type="button"
+        className="btn btn-secondary mb-3"
+        onClick={() => navigate("/")}
+      >
+        ← Back to Dashboard
+      </button>
       <h2 className="mb-4">Create New Lead</h2>
 
       <form onSubmit={handleSubmit}>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const SalesAgentForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,13 +13,16 @@ const SalesAgentForm = () => {
     };
 
     try {
-      const response = await fetch("https://major-project-two-backend-zeta.vercel.app/sales-agents", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://major-project-two-backend-zeta.vercel.app/sales-agents",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newAgent),
         },
-        body: JSON.stringify(newAgent),
-      });
+      );
 
       const data = await response.json();
 
@@ -37,8 +40,17 @@ const SalesAgentForm = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="container mt-4">
+      <button
+        type="button"
+        className="btn btn-secondary mb-3"
+        onClick={() => navigate("/")}
+      >
+        ← Back to Dashboard
+      </button>
       <div className="card">
         <div className="card-header">
           <h3 className="mb-0">Add New Sales Agent</h3>
