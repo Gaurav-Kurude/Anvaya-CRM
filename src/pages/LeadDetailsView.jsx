@@ -81,7 +81,7 @@ const LeadDetailsView = () => {
           body: JSON.stringify({
             lead: leadId,
             author: lead.salesAgent?._id,
-            commentText: newComment,
+            commentText: newComment.trim(),
           }),
         }
       );
