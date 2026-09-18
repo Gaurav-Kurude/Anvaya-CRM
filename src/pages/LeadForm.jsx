@@ -28,6 +28,7 @@ const LeadForm = () => {
         const data = await response.json();
 
         console.log("Agents API response:", data);
+        console.log("Agents:", data.agents);
 
         if (response.ok) {
           setAgents(data.agents || []);
@@ -186,18 +187,16 @@ const LeadForm = () => {
 
             {/* Sales Agent */}
             <div className="mb-3">
-              <label className="form-label">Assigned Sales Agent</label>
+              <label htmlFor="salesAgent" className="form-label">
+                Assigned Sales Agent
+              </label>
 
               <select
                 id="salesAgent"
+                name="salesAgent"
                 className="form-select"
                 value={formData.salesAgent}
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    salesAgent: event.target.value,
-                  })
-                }
+                onChange={handleChange}
                 required
               >
                 <option value="">Select Sales Agent</option>
