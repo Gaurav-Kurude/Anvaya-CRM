@@ -191,13 +191,18 @@ const LeadForm = () => {
           <label className="form-label">Assigned Sales Agent</label>
 
           <select
-            name="salesAgent"
-            value={formData.salesAgent}
-            onChange={handleChange}
+            id="salesAgent"
             className="form-select"
+            value={formData.salesAgent}
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                salesAgent: event.target.value,
+              })
+            }
             required
           >
-            <option value="">Select sales agent</option>
+            <option value="">Select Sales Agent</option>
 
             {agents.map((agent) => (
               <option key={agent._id} value={agent._id}>
