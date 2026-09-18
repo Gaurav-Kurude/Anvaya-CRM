@@ -27,8 +27,8 @@ const LeadForm = () => {
 
         const data = await response.json();
 
-        console.log("Agents API response:", data);
-        console.log("Agents:", data.agents);
+        // console.log("Agents API response:", data);
+        // console.log("Agents:", data.agents);
 
         if (response.ok) {
           setAgents(data.agents || []);
