@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Sidebar from "../components/Sidebar";
 
 const LeadForm = () => {
   const [agents, setAgents] = useState([]);
@@ -133,169 +134,158 @@ const LeadForm = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="container mt-4">
-      <button
-        type="button"
-        className="btn btn-secondary mb-3"
-        onClick={() => navigate("/")}
-      >
-        ← Back to Dashboard
-      </button>
-      <h2 className="mb-4">Create New Lead</h2>
+    <div className="container-fluid">
+      <div className="row">
+        {/* Sidebar */}
+        <Sidebar />
 
-      <form onSubmit={handleSubmit}>
-        {/* Lead Name */}
-        <div className="mb-3">
-          <label className="form-label">Lead Name</label>
+        {/* Main Content */}
+        <div className="col-md-9 col-lg-10 p-4">
+          <h2 className="mb-4">Create New Lead</h2>
 
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="form-control"
-            placeholder="Enter lead name"
-            required
-          />
+          <form onSubmit={handleSubmit}>
+            {/* Lead Name */}
+            <div className="mb-3">
+              <label className="form-label">Lead Name</label>
+
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="form-control"
+                placeholder="Enter lead name"
+                required
+              />
+            </div>
+
+            {/* Lead Source */}
+            <div className="mb-3">
+              <label className="form-label">Lead Source</label>
+
+              <select
+                name="source"
+                value={formData.source}
+                onChange={handleChange}
+                className="form-select"
+                required
+              >
+                <option value="">Select source</option>
+                <option value="Website">Website</option>
+                <option value="Referral">Referral</option>
+                <option value="Cold Call">Cold Call</option>
+                <option value="Advertisement">Advertisement</option>
+                <option value="Email">Email</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            {/* Sales Agent */}
+            <div className="mb-3">
+              <label className="form-label">Assigned Sales Agent</label>
+
+              <select
+                id="salesAgent"
+                className="form-select"
+                value={formData.salesAgent}
+                onChange={(event) =>
+                  setFormData({
+                    ...formData,
+                    salesAgent: event.target.value,
+                  })
+                }
+                required
+              >
+                <option value="">Select Sales Agent</option>
+
+                {agents.map((agent) => (
+                  <option key={agent._id} value={agent._id}>
+                    {agent.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Lead Status */}
+            <div className="mb-3">
+              <label className="form-label">Lead Status</label>
+
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="form-select"
+              >
+                <option value="New">New</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Qualified">Qualified</option>
+                <option value="Proposal Sent">Proposal Sent</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+
+            {/* Priority */}
+            <div className="mb-3">
+              <label className="form-label">Priority</label>
+
+              <select
+                name="priority"
+                value={formData.priority}
+                onChange={handleChange}
+                className="form-select"
+              >
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
+
+            {/* Time to Close */}
+            <div className="mb-3">
+              <label className="form-label">Time to Close (days)</label>
+
+              <input
+                type="number"
+                name="timeToClose"
+                value={formData.timeToClose}
+                onChange={handleChange}
+                className="form-control"
+                min="1"
+                placeholder="Enter number of days"
+                required
+              />
+            </div>
+
+            {/* Tags */}
+            <div className="mb-3">
+              <label className="form-label">Tags</label>
+
+              <select
+                name="tags"
+                className="form-select"
+                multiple={true}
+                value={formData.tags}
+                onChange={handleTagsChange}
+              >
+                {tags.map((tag) => (
+                  <option key={tag._id} value={tag.name}>
+                    {tag.name}
+                  </option>
+                ))}
+              </select>
+
+              <small className="text-muted">
+                Hold Ctrl to select multiple tags.
+              </small>
+            </div>
+
+            {/* Submit */}
+            <button type="submit" className="btn btn-primary">
+              Add Lead
+            </button>
+          </form>
         </div>
-
-        {/* Lead Source */}
-        <div className="mb-3">
-          <label className="form-label">Lead Source</label>
-
-          <select
-            name="source"
-            value={formData.source}
-            onChange={handleChange}
-            className="form-select"
-            required
-          >
-            <option value="">Select source</option>
-
-            <option value="Website">Website</option>
-
-            <option value="Referral">Referral</option>
-
-            <option value="Cold Call">Cold Call</option>
-
-            <option value="Advertisement">Advertisement</option>
-
-            <option value="Email">Email</option>
-
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        {/* Sales Agent */}
-        <div className="mb-3">
-          <label className="form-label">Assigned Sales Agent</label>
-
-          <select
-            id="salesAgent"
-            className="form-select"
-            value={formData.salesAgent}
-            onChange={(event) =>
-              setFormData({
-                ...formData,
-                salesAgent: event.target.value,
-              })
-            }
-            required
-          >
-            <option value="">Select Sales Agent</option>
-
-            {agents.map((agent) => (
-              <option key={agent._id} value={agent._id}>
-                {agent.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Lead Status */}
-        <div className="mb-3">
-          <label className="form-label">Lead Status</label>
-
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            className="form-select"
-          >
-            <option value="New">New</option>
-
-            <option value="Contacted">Contacted</option>
-
-            <option value="Qualified">Qualified</option>
-
-            <option value="Proposal Sent">Proposal Sent</option>
-
-            <option value="Closed">Closed</option>
-          </select>
-        </div>
-
-        {/* Priority */}
-        <div className="mb-3">
-          <label className="form-label">Priority</label>
-
-          <select
-            name="priority"
-            value={formData.priority}
-            onChange={handleChange}
-            className="form-select"
-          >
-            <option value="High">High</option>
-
-            <option value="Medium">Medium</option>
-
-            <option value="Low">Low</option>
-          </select>
-        </div>
-
-        {/* Time to Close */}
-        <div className="mb-3">
-          <label className="form-label">Time to Close (days)</label>
-
-          <input
-            type="number"
-            name="timeToClose"
-            value={formData.timeToClose}
-            onChange={handleChange}
-            className="form-control"
-            min="1"
-            placeholder="Enter number of days"
-            required
-          />
-        </div>
-
-        {/* Tags */}
-        <div className="mb-3">
-          <label className="form-label">Tags</label>
-
-          <select
-            name="tags"
-            className="form-select"
-            multiple={true}
-            value={formData.tags}
-            onChange={handleTagsChange}
-          >
-            {tags.map((tag) => (
-              <option key={tag._id} value={tag.name}>
-                {tag.name}
-              </option>
-            ))}
-          </select>
-
-          <small className="text-muted">
-            Hold Ctrl to select multiple tags.
-          </small>
-        </div>
-
-        {/* Submit */}
-        <button type="submit" className="btn btn-primary">
-          Add Lead
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

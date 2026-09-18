@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 const SalesAgentsView = () => {
   const navigate = useNavigate();
@@ -33,16 +34,7 @@ const SalesAgentsView = () => {
     <div className="container-fluid mt-4">
       <div className="row">
         {/* Sidebar */}
-        <div className="col-md-3">
-          <div className="border rounded p-3">
-            <button
-              className="btn btn-secondary w-100"
-              onClick={() => navigate("/")}
-            >
-              Back to Dashboard
-            </button>
-          </div>
-        </div>
+        <Sidebar/>
 
         {/* Sales Agent List */}
         <div className="col-md-9">

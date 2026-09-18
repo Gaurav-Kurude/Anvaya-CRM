@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 const LeadDetailsView = () => {
   const { leadId } = useParams();
@@ -138,23 +139,7 @@ const LeadDetailsView = () => {
       <div className="row min-vh-100">
 
         {/* Sidebar */}
-        <div className="col-md-3 col-lg-2 bg-light p-4">
-          <h4 className="mb-4">Anvaya CRM</h4>
-
-          <button
-            className="btn btn-outline-primary w-100 mb-3"
-            onClick={() => navigate("/")}
-          >
-            Back to Dashboard
-          </button>
-
-          <button
-            className="btn btn-outline-secondary w-100"
-            onClick={() => navigate("/leads")}
-          >
-            All Leads
-          </button>
-        </div>
+        <Sidebar/>
 
         {/* Main Content */}
         <div className="col-md-9 col-lg-10 p-4">

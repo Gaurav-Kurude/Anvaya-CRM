@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 const LeadsView = () => {
   const navigate = useNavigate();
@@ -96,37 +97,7 @@ const LeadsView = () => {
           ☰
         </button>
         {/* Sidebar */}
-        <div
-          className={`sidebar col-md-3 col-lg-2 bg-light p-4 ${
-            sidebarOpen ? "sidebar-open" : ""
-          }`}
-        >
-          {/* Mobile Close Button */}
-          <button
-            className="btn btn-sm btn-outline-secondary d-md-none mb-3"
-            onClick={() => setSidebarOpen(false)}
-          >
-            ✕ Close
-          </button>
-          <h4 className="mb-4">Anvaya CRM</h4>
-
-          <button
-            className="btn btn-outline-primary w-100 mb-3"
-            onClick={() => navigate("/")}
-          >
-            Back to Dashboard
-          </button>
-          {/* All Leads */}
-          <button
-            className="btn btn-outline-secondary w-100"
-            onClick={() => {
-              setSidebarOpen(false);
-              navigate("/leads");
-            }}
-          >
-            All Leads
-          </button>
-        </div>
+        <Sidebar />
 
         {/* Main Content */}
         <div className="col-md-9 col-lg-10 p-4">

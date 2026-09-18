@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Sidebar from "../components/Sidebar";
 
 const SalesAgentForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,67 +41,67 @@ const SalesAgentForm = () => {
       }
     } catch (error) {
       console.error("Error creating sales agent:", error);
+
       toast.error("Something went wrong.");
     }
   };
 
-  const navigate = useNavigate();
-
   return (
-    <div className="container mt-4">
-      <button
-        type="button"
-        className="btn btn-secondary mb-3"
-        onClick={() => navigate("/")}
-      >
-        ← Back to Dashboard
-      </button>
-      <div className="card">
-        <div className="card-header">
-          <h3 className="mb-0">Add New Sales Agent</h3>
-        </div>
+    <div className="container-fluid">
+      <div className="row">
+        {/* Sidebar */}
+        <Sidebar />
 
-        <div className="card-body">
-          <form onSubmit={handleSubmit}>
-            {/* Agent Name */}
-            <div className="mb-3">
-              <label htmlFor="name" className="form-label">
-                Agent Name:
-              </label>
-
-              <input
-                type="text"
-                id="name"
-                className="form-control"
-                placeholder="Enter agent name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+        {/* Main Content */}
+        <div className="col-md-9 col-lg-10 p-4">
+          <div className="card">
+            <div className="card-header">
+              <h3 className="mb-0">Add New Sales Agent</h3>
             </div>
 
-            {/* Email */}
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email Address:
-              </label>
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
+                {/* Agent Name */}
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label">
+                    Agent Name:
+                  </label>
 
-              <input
-                type="email"
-                id="email"
-                className="form-control"
-                placeholder="Enter email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+                  <input
+                    type="text"
+                    id="name"
+                    className="form-control"
+                    placeholder="Enter agent name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {/* Email */}
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Email Address:
+                  </label>
+
+                  <input
+                    type="email"
+                    id="email"
+                    className="form-control"
+                    placeholder="Enter email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <button type="submit" className="btn btn-primary">
+                  Create Agent
+                </button>
+              </form>
             </div>
-
-            {/* Submit Button */}
-            <button type="submit" className="btn btn-primary">
-              Create Agent
-            </button>
-          </form>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Sidebar from "../components/Sidebar";
 
 const SalesAgentView = () => {
   const [leads, setLeads] = useState([]);
@@ -41,7 +42,7 @@ const SalesAgentView = () => {
         const data = await response.json();
 
         if (response.ok) {
-          setAgents(data.salesAgents || []);
+          setAgents(data.agents || []);
         }
       } catch (error) {
         console.error("Error fetching agents:", error);
@@ -105,129 +106,133 @@ const SalesAgentView = () => {
   // Statuses
   const statuses = ["New", "Contacted", "Qualified", "Proposal Sent", "Closed"];
 
-  console.log("Tags:", tags);
-
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">Sales Agent View</h2>
-
-      {/* Filters and Sorting */}
-      <div className="row mb-4">
-        {/* Status Filter */}
-        <div className="col-md-4">
-          <label className="form-label">Filter by Status</label>
-
-          <select
-            className="form-select"
-            value={selectedStatus}
-            onChange={(event) => setSelectedStatus(event.target.value)}
-          >
-            <option value="">All Statuses</option>
-
-            {statuses.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Tag Filter */}
-        <div className="col-md-4">
-          <label className="form-label">Filter by Tag</label>
-
-          <select
-            className="form-select"
-            value={selectedTag}
-            onChange={(event) => setSelectedTag(event.target.value)}
-          >
-            <option value="">All Tags</option>
-
-            {tags.map((tag) => (
-              <option key={tag._id} value={tag.name}>
-                {tag.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Sort */}
-        <div className="col-md-4">
-          <label className="form-label">Sort Leads By</label>
-
-          <select
-            className="form-select"
-            value={sortBy}
-            onChange={(event) => setSortBy(event.target.value)}
-          >
-            <option value="">Default</option>
-
-            <option value="status">Status</option>
-
-            <option value="priority">Priority</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Sales Agent Columns */}
+    <div className="container-fluid">
       <div className="row">
-        {agents.map((agent) => {
-          // Leads belonging to current agent
-          const agentLeads = sortedLeads.filter((lead) =>
-            lead.salesAgents?.some(
-              (assignedAgent) => assignedAgent._id === agent._id,
-            ),
-          );
+        {/* Sidebar */}
+        <Sidebar />
 
-          return (
-            <div className="col-md-6 col-lg-4 mb-4" key={agent._id}>
-              <div className="card h-100">
-                {/* Agent Header */}
-                <div className="card-header">
-                  <strong>{agent.name}</strong>
+        {/* Main Content */}
+        <div className="col-md-9 col-lg-10 p-4">
+          <h2 className="mb-4">Sales Agent View</h2>
 
-                  <span className="badge bg-secondary float-end">
-                    {agentLeads.length} Leads
-                  </span>
-                </div>
+          {/* Filters and Sorting */}
+          <div className="row mb-4">
+            {/* Status Filter */}
+            <div className="col-md-4">
+              <label className="form-label">Filter by Status</label>
 
-                {/* Agent Leads */}
-                <div className="card-body">
-                  {agentLeads.length === 0 ? (
-                    <p className="text-muted">No leads</p>
-                  ) : (
-                    agentLeads.map((lead) => (
-                      <div key={lead._id} className="card mb-3">
-                        <div className="card-body">
-                          <h6 className="card-title">{lead.name}</h6>
+              <select
+                className="form-select"
+                value={selectedStatus}
+                onChange={(event) => setSelectedStatus(event.target.value)}
+              >
+                <option value="">All Statuses</option>
 
-                          <p className="mb-1">
-                            <strong>Status:</strong> {lead.status}
-                          </p>
-
-                          <p className="mb-1">
-                            <strong>Time to Close:</strong> {lead.timeToClose}{" "}
-                            days
-                          </p>
-
-                          <p className="mb-1">
-                            <strong>Priority:</strong>{" "}
-                            {lead.priority || "Medium"}
-                          </p>
-
-                          <p className="mb-0">
-                            <strong>Tags:</strong>{" "}
-                            {lead.tags?.join(", ") || "No tags"}
-                          </p>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
+                {statuses.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
             </div>
-          );
-        })}
+
+            {/* Tag Filter */}
+            <div className="col-md-4">
+              <label className="form-label">Filter by Tag</label>
+
+              <select
+                className="form-select"
+                value={selectedTag}
+                onChange={(event) => setSelectedTag(event.target.value)}
+              >
+                <option value="">All Tags</option>
+
+                {tags.map((tag) => (
+                  <option key={tag._id} value={tag.name}>
+                    {tag.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sort */}
+            <div className="col-md-4">
+              <label className="form-label">Sort Leads By</label>
+
+              <select
+                className="form-select"
+                value={sortBy}
+                onChange={(event) => setSortBy(event.target.value)}
+              >
+                <option value="">Default</option>
+
+                <option value="status">Status</option>
+
+                <option value="priority">Priority</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Sales Agent Columns */}
+          <div className="row">
+            {agents.map((agent) => {
+              // Leads belonging to current agent
+              const agentLeads = sortedLeads.filter(
+                (lead) => lead.salesAgent?._id === agent._id,
+              );
+
+              return (
+                <div className="col-md-6 col-lg-4 mb-4" key={agent._id}>
+                  <div className="card h-100">
+                    {/* Agent Header */}
+                    <div className="card-header">
+                      <strong>{agent.name}</strong>
+
+                      <span className="badge bg-secondary float-end">
+                        {agentLeads.length} Leads
+                      </span>
+                    </div>
+
+                    {/* Agent Leads */}
+                    <div className="card-body">
+                      {agentLeads.length === 0 ? (
+                        <p className="text-muted">No leads</p>
+                      ) : (
+                        agentLeads.map((lead) => (
+                          <div key={lead._id} className="card mb-3">
+                            <div className="card-body">
+                              <h6 className="card-title">{lead.name}</h6>
+
+                              <p className="mb-1">
+                                <strong>Status:</strong> {lead.status}
+                              </p>
+
+                              <p className="mb-1">
+                                <strong>Time to Close:</strong>{" "}
+                                {lead.timeToClose} days
+                              </p>
+
+                              <p className="mb-1">
+                                <strong>Priority:</strong>{" "}
+                                {lead.priority || "Medium"}
+                              </p>
+
+                              <p className="mb-0">
+                                <strong>Tags:</strong>{" "}
+                                {lead.tags?.join(", ") || "No tags"}
+                              </p>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
