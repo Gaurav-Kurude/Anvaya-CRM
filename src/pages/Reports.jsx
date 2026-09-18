@@ -118,9 +118,15 @@ const Reports = () => {
 
           <h4 className="mb-4">Anvaya CRM</h4>
 
-          <a href="/" className="btn btn-outline-primary w-100">
-            ← Back to Dashboard
-          </a>
+          <button
+            className="btn btn-outline-primary w-100 mb-3"
+            onClick={() => {
+              setSidebarOpen(false);
+              navigate("/");
+            }}
+          >
+            Back to Dashboard
+          </button>
           <button
             className="btn btn-outline-secondary w-100"
             onClick={() => {
