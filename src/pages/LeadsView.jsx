@@ -32,7 +32,7 @@ const LeadsView = () => {
         }
 
         if (agentsResponse.ok) {
-          setAgents(agentsData.SalesAgents || []);
+          setAgents(agentsData.agents || []);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -58,7 +58,7 @@ const LeadsView = () => {
         return true;
       }
 
-      return lead.salesAgents?.some((agent) => agent._id === agentFilter);
+      return lead.salesAgent?._id === agentFilter;
     })
     .sort((a, b) => {
       if (sortBy === "priority") {
@@ -208,11 +208,7 @@ const LeadsView = () => {
 
                         {/* Priority */}
                         <div className="col-md-2">
-                          {lead.salesAgents?.length > 0
-                            ? lead.salesAgents
-                                .map((agent) => agent.name)
-                                .join(", ")
-                            : "Not Assigned"}
+                          {lead.priority || "Medium"}
                         </div>
 
                         {/* Time to Close */}

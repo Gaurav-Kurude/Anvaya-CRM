@@ -24,7 +24,9 @@ const LeadForm = () => {
     const fetchData = async () => {
       try {
         const [agentsResponse, tagsResponse] = await Promise.all([
-          fetch("https://major-project-two-backend-zeta.vercel.app/sales-agents"),
+          fetch(
+            "https://major-project-two-backend-zeta.vercel.app/sales-agents",
+          ),
           fetch("https://major-project-two-backend-zeta.vercel.app/tags"),
         ]);
 
@@ -32,14 +34,14 @@ const LeadForm = () => {
         const tagsData = await tagsResponse.json();
 
         if (agentsResponse.ok) {
-          setAgents(agentsData.agents || []);
+          setAgents(Array.isArray(agentsData.agents) ? agentsData.agents : []);
         }
 
         if (tagsResponse.ok) {
-          setTags(tagsData.tags || []);
+          setTags(Array.isArray(tagsData.tags) ? tagsData.tags : []);
         }
       } catch (error) {
-        console.error("Error fetching agents and tags:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -60,7 +62,7 @@ const LeadForm = () => {
   const handleTagsChange = (event) => {
     const selectedTags = Array.from(
       event.target.selectedOptions,
-      (option) => option.value
+      (option) => option.value,
     );
 
     setFormData((previousData) => ({
@@ -102,7 +104,7 @@ const LeadForm = () => {
             timeToClose: Number(formData.timeToClose),
             tags: formData.tags,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -137,14 +139,10 @@ const LeadForm = () => {
 
       <div className="card shadow-sm">
         <div className="card-body p-4">
-
           <form onSubmit={handleSubmit}>
-
             {/* Lead Name */}
             <div className="mb-3">
-              <label className="form-label">
-                Lead Name
-              </label>
+              <label className="form-label">Lead Name</label>
 
               <input
                 type="text"
@@ -159,9 +157,7 @@ const LeadForm = () => {
 
             {/* Lead Source */}
             <div className="mb-3">
-              <label className="form-label">
-                Lead Source
-              </label>
+              <label className="form-label">Lead Source</label>
 
               <select
                 className="form-select"
@@ -174,9 +170,7 @@ const LeadForm = () => {
                 <option value="Website">Website</option>
                 <option value="Referral">Referral</option>
                 <option value="Cold Call">Cold Call</option>
-                <option value="Advertisement">
-                  Advertisement
-                </option>
+                <option value="Advertisement">Advertisement</option>
                 <option value="Email">Email</option>
                 <option value="Other">Other</option>
               </select>
@@ -184,26 +178,26 @@ const LeadForm = () => {
 
             {/* Sales Agent */}
             <div className="mb-3">
-              <label className="form-label">
-                Sales Agent
+              <label htmlFor="salesAgent" className="form-label">
+                Sales Agent:
               </label>
 
               <select
+                id="salesAgent"
                 className="form-select"
-                name="salesAgent"
                 value={formData.salesAgent}
-                onChange={handleChange}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    salesAgent: e.target.value,
+                  })
+                }
                 required
               >
-                <option value="">
-                  Select Sales Agent
-                </option>
+                <option value="">Select Sales Agent</option>
 
                 {agents.map((agent) => (
-                  <option
-                    key={agent._id}
-                    value={agent._id}
-                  >
+                  <option key={agent._id} value={agent._id}>
                     {agent.name}
                   </option>
                 ))}
@@ -212,9 +206,7 @@ const LeadForm = () => {
 
             {/* Lead Status */}
             <div className="mb-3">
-              <label className="form-label">
-                Lead Status
-              </label>
+              <label className="form-label">Lead Status</label>
 
               <select
                 className="form-select"
@@ -223,24 +215,16 @@ const LeadForm = () => {
                 onChange={handleChange}
               >
                 <option value="New">New</option>
-                <option value="Contacted">
-                  Contacted
-                </option>
-                <option value="Qualified">
-                  Qualified
-                </option>
-                <option value="Proposal Sent">
-                  Proposal Sent
-                </option>
+                <option value="Contacted">Contacted</option>
+                <option value="Qualified">Qualified</option>
+                <option value="Proposal Sent">Proposal Sent</option>
                 <option value="Closed">Closed</option>
               </select>
             </div>
 
             {/* Priority */}
             <div className="mb-3">
-              <label className="form-label">
-                Priority
-              </label>
+              <label className="form-label">Priority</label>
 
               <select
                 className="form-select"
@@ -256,9 +240,7 @@ const LeadForm = () => {
 
             {/* Time to Close */}
             <div className="mb-3">
-              <label className="form-label">
-                Time to Close
-              </label>
+              <label className="form-label">Time to Close</label>
 
               <input
                 type="number"
@@ -274,9 +256,7 @@ const LeadForm = () => {
 
             {/* Tags */}
             <div className="mb-4">
-              <label className="form-label">
-                Tags
-              </label>
+              <label className="form-label">Tags</label>
 
               <select
                 className="form-select"
@@ -285,10 +265,7 @@ const LeadForm = () => {
                 onChange={handleTagsChange}
               >
                 {tags.map((tag) => (
-                  <option
-                    key={tag._id}
-                    value={tag.name}
-                  >
+                  <option key={tag._id} value={tag.name}>
                     {tag.name}
                   </option>
                 ))}
@@ -307,9 +284,7 @@ const LeadForm = () => {
             >
               {loading ? "Creating..." : "Create Lead"}
             </button>
-
           </form>
-
         </div>
       </div>
     </div>

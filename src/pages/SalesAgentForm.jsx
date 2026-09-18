@@ -29,16 +29,16 @@ const SalesAgentForm = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Sales agent created successfully!");
+        toast.success("Sales agent created successfully!");
 
         setName("");
         setEmail("");
       } else {
-        alert(data.message || "Failed to create sales agent.");
+        toast.error(data.message || "Failed to create sales agent.");
       }
     } catch (error) {
       console.error("Error creating sales agent:", error);
-      alert("Something went wrong.");
+      toast.error("Something went wrong.");
     }
   };
 
