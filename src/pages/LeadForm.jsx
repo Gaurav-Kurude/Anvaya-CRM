@@ -27,8 +27,12 @@ const LeadForm = () => {
 
         const data = await response.json();
 
-        if (data.success) {
-          setAgents(data.agents);
+        console.log("Agents API response:", data);
+
+        if (response.ok) {
+          setAgents(data.agents || []);
+        } else {
+          console.error("Failed to fetch agents:", data.message);
         }
       } catch (error) {
         console.error("Error fetching agents:", error);
