@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 const LeadForm = () => {
   const [agents, setAgents] = useState([]);
   const [tags, setTags] = useState([]);
@@ -106,7 +108,7 @@ const LeadForm = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Lead created successfully!");
+        toast.success("Lead created successfully!");
 
         // Reset form
         setFormData({
@@ -119,12 +121,12 @@ const LeadForm = () => {
           priority: "Medium",
         });
       } else {
-        alert(data.message || "Failed to create lead");
+        toast.error(data.message || "Failed to create lead.");
       }
     } catch (error) {
       console.error("Error creating lead:", error);
 
-      alert("Something went wrong");
+      toast.error("Something went wrong.");
     }
   };
 
