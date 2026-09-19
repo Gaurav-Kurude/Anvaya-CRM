@@ -136,12 +136,29 @@ const ReportsView = () => {
     ],
   };
 
+  // --------------------------------
+  // Pie Chart Data
+  // --------------------------------
+
   const statusChartData = {
     labels: statuses,
     datasets: [
       {
         label: "Leads",
         data: statusCounts,
+
+        // Color for each pie chart section
+        backgroundColor: [
+          "#0d6efd", // New - Blue
+          "#ffc107", // Contacted - Yellow
+          "#198754", // Qualified - Green
+          "#fd7e14", // Proposal Sent - Orange
+          "#dc3545", // Closed - Red
+        ],
+
+        // Border around each pie section
+        borderColor: "#ffffff",
+        borderWidth: 2,
       },
     ],
   };
@@ -153,7 +170,7 @@ const ReportsView = () => {
         <Sidebar />
 
         {/* Main Content */}
-        <div className="col-md-9 col-lg-10 p-4">
+        <div className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
           <h2 className="mb-4">Reports and Visualization</h2>
 
           {/* -------------------------------- */}
@@ -171,10 +188,17 @@ const ReportsView = () => {
                 <strong> {closedLastWeek.length}</strong>
               </p>
 
-              <div style={{ maxWidth: "400px", height: "250px" }}>
+              <div
+                style={{
+                  maxWidth: "400px",
+                  height: "250px",
+                }}
+              >
                 <Bar
                   data={closedLastWeekChartData}
-                  options={{ maintainAspectRatio: false }}
+                  options={{
+                    maintainAspectRatio: false,
+                  }}
                 />
               </div>
             </div>
@@ -194,10 +218,17 @@ const ReportsView = () => {
 
               <p className="text-muted">Leads currently in the pipeline</p>
 
-              <div style={{ maxWidth: "500px", height: "300px" }}>
+              <div
+                style={{
+                  maxWidth: "500px",
+                  height: "300px",
+                }}
+              >
                 <Bar
                   data={pipelineChartData}
-                  options={{ maintainAspectRatio: false }}
+                  options={{
+                    maintainAspectRatio: false,
+                  }}
                 />
               </div>
             </div>
@@ -218,10 +249,17 @@ const ReportsView = () => {
               {agentNames.length === 0 ? (
                 <p className="text-muted">No agent data available</p>
               ) : (
-                <div style={{ maxWidth: "500px", height: "300px" }}>
+                <div
+                  style={{
+                    maxWidth: "500px",
+                    height: "300px",
+                  }}
+                >
                   <Bar
                     data={agentChartData}
-                    options={{ maintainAspectRatio: false }}
+                    options={{
+                      maintainAspectRatio: false,
+                    }}
                   />
                 </div>
               )}
@@ -247,7 +285,14 @@ const ReportsView = () => {
               >
                 <Pie
                   data={statusChartData}
-                  options={{ maintainAspectRatio: false }}
+                  options={{
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        position: "bottom",
+                      },
+                    },
+                  }}
                 />
               </div>
             </div>
