@@ -23,7 +23,7 @@ const LeadDetailsView = () => {
 
         const data = await response.json();
 
-        console.log("Lead Details:", data);
+        // console.log("Lead Details:", data);
 
         if (response.ok) {
           setLead(data.lead);
