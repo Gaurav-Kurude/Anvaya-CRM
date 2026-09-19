@@ -1,22 +1,56 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 
 const LeadsView = () => {
   const navigate = useNavigate();
 
+  // URL search parameters
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Leads and agents
   const [leads, setLeads] = useState([]);
   const [agents, setAgents] = useState([]);
 
+  // Filters
   const [statusFilter, setStatusFilter] = useState("");
   const [agentFilter, setAgentFilter] = useState("");
   const [tagFilter, setTagFilter] = useState("");
   const [sourceFilter, setSourceFilter] = useState("");
   const [sortBy, setSortBy] = useState("");
 
+  // Loading
   const [loading, setLoading] = useState(true);
 
+  // --------------------------------------------------
+  // Read filters from URL
+  // --------------------------------------------------
+  useEffect(() => {
+    setStatusFilter(searchParams.get("status") || "");
+    setAgentFilter(searchParams.get("salesAgent") || "");
+    setTagFilter(searchParams.get("tag") || "");
+    setSourceFilter(searchParams.get("source") || "");
+    setSortBy(searchParams.get("sort") || "");
+  }, [searchParams]);
+
+  // --------------------------------------------------
+  // Update URL when filter changes
+  // --------------------------------------------------
+  const updateFilter = (key, value) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+
+    setSearchParams(params);
+  };
+
+  // --------------------------------------------------
   // Fetch leads and sales agents
+  // --------------------------------------------------
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,16 +64,19 @@ const LeadsView = () => {
         const leadsData = await leadsResponse.json();
         const agentsData = await agentsResponse.json();
 
-        // console.log("Leads API response:", leadsData);
-        // console.log("Agents API response:", agentsData);
+        console.log("Leads API response:", leadsData);
+        console.log("Agents API response:", agentsData);
 
+        // Set leads
         if (leadsResponse.ok) {
           console.log("Leads:", leadsData.leads);
-          setLeads(leadsData.leads || []);
+
+          setLeads(Array.isArray(leadsData.leads) ? leadsData.leads : []);
         }
 
+        // Set sales agents
         if (agentsResponse.ok) {
-          setAgents(agentsData.agents || []);
+          setAgents(Array.isArray(agentsData.agents) ? agentsData.agents : []);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -51,10 +88,18 @@ const LeadsView = () => {
     fetchData();
   }, []);
 
+  // --------------------------------------------------
   // Get unique tags from all leads
-  const availableTags = [...new Set(leads.flatMap((lead) => lead.tags || []))];
+  // --------------------------------------------------
+  const availableTags = [
+    ...new Set(
+      leads.flatMap((lead) => (Array.isArray(lead.tags) ? lead.tags : [])),
+    ),
+  ];
 
+  // --------------------------------------------------
   // Filter and sort leads
+  // --------------------------------------------------
   const filteredLeads = leads
     // Filter by Status
     .filter((lead) => {
@@ -94,6 +139,7 @@ const LeadsView = () => {
 
     // Sort
     .sort((a, b) => {
+      // Priority sorting
       if (sortBy === "priority") {
         const priorityOrder = {
           High: 1,
@@ -106,14 +152,17 @@ const LeadsView = () => {
         );
       }
 
+      // Time to close sorting
       if (sortBy === "timeToClose") {
-        return a.timeToClose - b.timeToClose;
+        return Number(a.timeToClose || 0) - Number(b.timeToClose || 0);
       }
 
       return 0;
     });
 
+  // --------------------------------------------------
   // Loading state
+  // --------------------------------------------------
   if (loading) {
     return (
       <div className="container-fluid">
@@ -121,13 +170,18 @@ const LeadsView = () => {
           <Sidebar />
 
           <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
-            <p className="text-muted">Loading leads...</p>
+            <div className="d-flex justify-content-center align-items-center py-5">
+              <p className="text-muted mb-0">Loading leads...</p>
+            </div>
           </main>
         </div>
       </div>
     );
   }
 
+  // --------------------------------------------------
+  // Page
+  // --------------------------------------------------
   return (
     <div className="container-fluid">
       <div className="row min-vh-100">
@@ -161,32 +215,41 @@ const LeadsView = () => {
 
             <div className="card-body">
               <div className="row">
-                {/* 1. Status Filter */}
+                {/* Status Filter */}
                 <div className="col-12 col-md-4 mb-3">
                   <label className="form-label">Filter by Status</label>
 
                   <select
                     className="form-select"
                     value={statusFilter}
-                    onChange={(event) => setStatusFilter(event.target.value)}
+                    onChange={(event) =>
+                      updateFilter("status", event.target.value)
+                    }
                   >
                     <option value="">All Statuses</option>
+
                     <option value="New">New</option>
+
                     <option value="Contacted">Contacted</option>
+
                     <option value="Qualified">Qualified</option>
+
                     <option value="Proposal Sent">Proposal Sent</option>
+
                     <option value="Closed">Closed</option>
                   </select>
                 </div>
 
-                {/* 2. Sales Agent Filter */}
+                {/* Sales Agent Filter */}
                 <div className="col-12 col-md-4 mb-3">
                   <label className="form-label">Filter by Sales Agent</label>
 
                   <select
                     className="form-select"
                     value={agentFilter}
-                    onChange={(event) => setAgentFilter(event.target.value)}
+                    onChange={(event) =>
+                      updateFilter("salesAgent", event.target.value)
+                    }
                   >
                     <option value="">All Agents</option>
 
@@ -198,33 +261,43 @@ const LeadsView = () => {
                   </select>
                 </div>
 
-                {/* 3. Lead Source Filter */}
+                {/* Lead Source Filter */}
                 <div className="col-12 col-md-4 mb-3">
                   <label className="form-label">Filter by Lead Source</label>
 
                   <select
                     className="form-select"
                     value={sourceFilter}
-                    onChange={(event) => setSourceFilter(event.target.value)}
+                    onChange={(event) =>
+                      updateFilter("source", event.target.value)
+                    }
                   >
                     <option value="">All Sources</option>
+
                     <option value="Website">Website</option>
+
                     <option value="Referral">Referral</option>
+
                     <option value="Cold Call">Cold Call</option>
+
                     <option value="Advertisement">Advertisement</option>
+
                     <option value="Email">Email</option>
+
                     <option value="Other">Other</option>
                   </select>
                 </div>
 
-                {/* 4. Tag Filter */}
+                {/* Tag Filter */}
                 <div className="col-12 col-md-4 mb-3">
                   <label className="form-label">Filter by Tag</label>
 
                   <select
                     className="form-select"
                     value={tagFilter}
-                    onChange={(event) => setTagFilter(event.target.value)}
+                    onChange={(event) =>
+                      updateFilter("tag", event.target.value)
+                    }
                   >
                     <option value="">All Tags</option>
 
@@ -236,17 +309,21 @@ const LeadsView = () => {
                   </select>
                 </div>
 
-                {/* 5. Sort By */}
+                {/* Sort By */}
                 <div className="col-12 col-md-4 mb-3">
                   <label className="form-label">Sort By</label>
 
                   <select
                     className="form-select"
                     value={sortBy}
-                    onChange={(event) => setSortBy(event.target.value)}
+                    onChange={(event) =>
+                      updateFilter("sort", event.target.value)
+                    }
                   >
                     <option value="">Default</option>
+
                     <option value="priority">Priority</option>
+
                     <option value="timeToClose">Time to Close</option>
                   </select>
                 </div>
@@ -275,7 +352,7 @@ const LeadsView = () => {
                 <div className="list-group list-group-flush">
                   {filteredLeads.map((lead) => (
                     <div key={lead._id} className="list-group-item p-3">
-                      <div className="row align-items-center g-2">
+                      <div className="row align-items-center g-3">
                         {/* Lead Name */}
                         <div className="col-12 col-sm-6 col-lg-3">
                           <small className="text-muted d-block">Lead</small>
