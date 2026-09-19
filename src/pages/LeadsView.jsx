@@ -139,7 +139,6 @@ const LeadsView = () => {
 
     // Sort
     .sort((a, b) => {
-      // Priority sorting
       if (sortBy === "priority") {
         const priorityOrder = {
           High: 1,
@@ -152,7 +151,6 @@ const LeadsView = () => {
         );
       }
 
-      // Time to close sorting
       if (sortBy === "timeToClose") {
         return Number(a.timeToClose || 0) - Number(b.timeToClose || 0);
       }

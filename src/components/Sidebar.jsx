@@ -15,8 +15,9 @@ const Sidebar = () => {
       {/* Mobile Toggle Button */}
       <button
         type="button"
-        className="btn btn-primary mobile-menu-btn d-md-none"
+        className="btn btn-primary mobile-menu-btn"
         onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Toggle navigation menu"
       >
         ☰
       </button>
