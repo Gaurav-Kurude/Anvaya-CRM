@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -24,6 +25,8 @@ const Dashboard = () => {
         }
       } catch (error) {
         console.error("Error fetching leads:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -38,10 +41,35 @@ const Dashboard = () => {
     return leads.filter((lead) => lead.status === status).length;
   };
 
+  // Get latest 3 leads
+  const recentLeads = [...leads]
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+    .slice(0, 3);
+
   // Quick filter
   const handleStatusFilter = (status) => {
     navigate(`/leads?status=${encodeURIComponent(status)}`);
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="container-fluid">
+        <div className="row min-vh-100">
+          <Sidebar />
+
+          <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
+            <div className="d-flex justify-content-center align-items-center py-5">
+              <p className="text-muted mb-0">Loading dashboard...</p>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid">
@@ -50,20 +78,27 @@ const Dashboard = () => {
         <Sidebar />
 
         {/* Main Content */}
-        <div className="col-md-9 col-lg-10 p-4">
-          <h2 className="mb-4">Anvaya CRM Dashboard</h2>
+        <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
+          {/* Header */}
+          <div className="mb-4">
+            <h2 className="mb-1">Anvaya CRM Dashboard</h2>
+
+            <p className="text-muted mb-0">
+              Manage your leads and sales activities
+            </p>
+          </div>
 
           {/* Lead Status Cards */}
-          <div className="row mb-4">
+          <div className="row g-3 mb-4">
             {statuses.map((status) => (
-              <div className="col-md-6 col-lg mb-3" key={status}>
-                <div className="card h-100">
+              <div className="col-12 col-sm-6 col-lg" key={status}>
+                <div className="card h-100 shadow-sm">
                   <div className="card-body">
-                    <h6 className="text-muted">{status}</h6>
+                    <h6 className="text-muted mb-2">{status}</h6>
 
-                    <h2>{getStatusCount(status)}</h2>
+                    <h2 className="mb-1">{getStatusCount(status)}</h2>
 
-                    <p className="mb-0">Leads</p>
+                    <p className="text-muted mb-0">Leads</p>
                   </div>
                 </div>
               </div>
@@ -71,7 +106,7 @@ const Dashboard = () => {
           </div>
 
           {/* Quick Filters */}
-          <div className="card mb-4">
+          <div className="card shadow-sm mb-4">
             <div className="card-body">
               <h5 className="mb-3">Quick Filters</h5>
 
@@ -79,6 +114,7 @@ const Dashboard = () => {
                 {statuses.map((status) => (
                   <button
                     key={status}
+                    type="button"
                     className="btn btn-outline-primary"
                     onClick={() => handleStatusFilter(status)}
                   >
@@ -90,35 +126,75 @@ const Dashboard = () => {
           </div>
 
           {/* Recent Leads */}
-          <div className="card mb-4">
+          <div className="card shadow-sm mb-4">
             <div className="card-header">
-              <h5 className="mb-0">Recent Leads</h5>
+              <div className="d-flex justify-content-between align-items-center">
+                <h5 className="mb-0">Recent Leads</h5>
+
+                <span className="badge text-bg-secondary">
+                  {recentLeads.length}
+                </span>
+              </div>
             </div>
 
             <div className="card-body">
-              {leads.length === 0 ? (
-                <p className="text-muted">No leads available.</p>
+              {recentLeads.length === 0 ? (
+                <div className="text-center py-4">
+                  <p className="text-muted mb-0">No recent leads available.</p>
+                </div>
               ) : (
-                <div className="row">
-                  {leads.slice(0, 3).map((lead) => (
-                    <div className="col-md-4 mb-3" key={lead._id}>
-                      <div className="card h-100">
+                <div className="row g-3">
+                  {recentLeads.map((lead) => (
+                    <div className="col-12 col-md-6 col-lg-4" key={lead._id}>
+                      <div className="card h-100 border shadow-sm">
                         <div className="card-body">
-                          <h6>{lead.name}</h6>
+                          {/* Lead Name */}
+                          <h6 className="fw-bold mb-3">{lead.name}</h6>
 
-                          <p className="mb-1">
-                            <strong>Status:</strong> {lead.status}
-                          </p>
+                          {/* Status */}
+                          <div className="mb-2">
+                            <small className="text-muted d-block">Status</small>
 
-                          <p className="mb-1">
-                            <strong>Agent:</strong>{" "}
-                            {lead.salesAgent?.name || "Not Assigned"}
-                          </p>
+                            <span className="badge text-bg-primary">
+                              {lead.status}
+                            </span>
+                          </div>
 
-                          <p className="mb-0">
-                            <strong>Priority:</strong>{" "}
-                            {lead.priority || "Medium"}
-                          </p>
+                          {/* Sales Agent */}
+                          <div className="mb-2">
+                            <small className="text-muted d-block">
+                              Sales Agent
+                            </small>
+
+                            <span>
+                              {lead.salesAgent?.name || "Not Assigned"}
+                            </span>
+                          </div>
+
+                          {/* Priority */}
+                          <div className="mb-2">
+                            <small className="text-muted d-block">
+                              Priority
+                            </small>
+
+                            <span>{lead.priority || "Medium"}</span>
+                          </div>
+
+                          {/* Source */}
+                          <div className="mb-3">
+                            <small className="text-muted d-block">Source</small>
+
+                            <span>{lead.source || "Not Available"}</span>
+                          </div>
+
+                          {/* View Lead */}
+                          <button
+                            type="button"
+                            className="btn btn-outline-primary btn-sm w-100"
+                            onClick={() => navigate(`/leads/${lead._id}`)}
+                          >
+                            View Lead
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -129,13 +205,16 @@ const Dashboard = () => {
           </div>
 
           {/* Add New Lead */}
-          <button
-            className="btn btn-primary"
-            onClick={() => navigate("/leads/new")}
-          >
-            + Add New Lead
-          </button>
-        </div>
+          <div className="d-grid d-sm-flex">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => navigate("/leads/new")}
+            >
+              + Add New Lead
+            </button>
+          </div>
+        </main>
       </div>
     </div>
   );
