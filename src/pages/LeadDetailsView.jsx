@@ -18,7 +18,7 @@ const LeadDetailsView = () => {
     const fetchLead = async () => {
       try {
         const response = await fetch(
-          `https://major-project-two-backend-zeta.vercel.app/leads/${leadId}`
+          `https://major-project-two-backend-zeta.vercel.app/leads/${leadId}`,
         );
 
         const data = await response.json();
@@ -45,7 +45,7 @@ const LeadDetailsView = () => {
     const fetchComments = async () => {
       try {
         const response = await fetch(
-          `https://major-project-two-backend-zeta.vercel.app/leads/${leadId}/comments`
+          `https://major-project-two-backend-zeta.vercel.app/leads/${leadId}/comments`,
         );
 
         const data = await response.json();
@@ -86,7 +86,7 @@ const LeadDetailsView = () => {
             author: lead.salesAgent?._id,
             commentText: newComment.trim(),
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -139,16 +139,12 @@ const LeadDetailsView = () => {
   return (
     <div className="container-fluid">
       <div className="row min-vh-100">
-
         {/* Sidebar */}
-        <Sidebar/>
+        <Sidebar />
 
         {/* Main Content */}
         <div className="col-md-9 col-lg-10 p-4">
-
-          <h2 className="mb-4">
-            Lead Management: {lead.name}
-          </h2>
+          <h2 className="mb-4">Lead Management: {lead.name}</h2>
 
           {/* Lead Details */}
           <div className="card shadow-sm mb-4">
@@ -157,15 +153,11 @@ const LeadDetailsView = () => {
             </div>
 
             <div className="card-body">
-
               <div className="row">
-
                 {/* Lead Name */}
                 <div className="col-md-6 mb-3">
                   <strong>Lead Name:</strong>
-                  <p className="mb-0">
-                    {lead.name}
-                  </p>
+                  <p className="mb-0">{lead.name}</p>
                 </div>
 
                 {/* Sales Agent */}
@@ -179,18 +171,14 @@ const LeadDetailsView = () => {
                 {/* Source */}
                 <div className="col-md-6 mb-3">
                   <strong>Lead Source:</strong>
-                  <p className="mb-0">
-                    {lead.source}
-                  </p>
+                  <p className="mb-0">{lead.source}</p>
                 </div>
 
                 {/* Status */}
                 <div className="col-md-6 mb-3">
                   <strong>Lead Status:</strong>
                   <p className="mb-0">
-                    <span className="badge text-bg-primary">
-                      {lead.status}
-                    </span>
+                    <span className="badge text-bg-primary">{lead.status}</span>
                   </p>
                 </div>
 
@@ -207,86 +195,76 @@ const LeadDetailsView = () => {
                 {/* Time to Close */}
                 <div className="col-md-6 mb-3">
                   <strong>Time to Close:</strong>
-                  <p className="mb-0">
-                    {lead.timeToClose} Days
-                  </p>
+                  <p className="mb-0">{lead.timeToClose} Days</p>
                 </div>
 
+                {/* Tags */}
+                <div className="mb-3">
+                  <strong>Tags:</strong>
+
+                  <div className="mt-2">
+                    {lead.tags && lead.tags.length > 0 ? (
+                      lead.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="badge text-bg-secondary me-2"
+                        >
+                          {tag}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-muted">No tags</span>
+                    )}
+                  </div>
+                </div>
               </div>
 
               {/* Edit Button */}
               <button
                 className="btn btn-primary mt-2"
-                onClick={() =>
-                  navigate(`/leads/edit/${leadId}`)
-                }
+                onClick={() => navigate(`/leads/edit/${leadId}`)}
               >
                 Edit Lead Details
               </button>
-
             </div>
           </div>
 
           {/* Comments Section */}
           <div className="card shadow-sm">
-
             <div className="card-header">
-              <h5 className="mb-0">
-                Comments
-              </h5>
+              <h5 className="mb-0">Comments</h5>
             </div>
 
             <div className="card-body">
-
               {/* Existing Comments */}
               {comments.length === 0 ? (
-                <p className="text-muted">
-                  No comments yet.
-                </p>
+                <p className="text-muted">No comments yet.</p>
               ) : (
                 comments.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="border-bottom pb-3 mb-3"
-                  >
+                  <div key={comment.id} className="border-bottom pb-3 mb-3">
                     <div className="d-flex justify-content-between">
-
-                      <strong>
-                        {comment.author}
-                      </strong>
+                      <strong>{comment.author}</strong>
 
                       <small className="text-muted">
-                        {new Date(
-                          comment.createdAt
-                        ).toLocaleString()}
+                        {new Date(comment.createdAt).toLocaleString()}
                       </small>
-
                     </div>
 
-                    <p className="mt-2 mb-0">
-                      {comment.commentText}
-                    </p>
+                    <p className="mt-2 mb-0">{comment.commentText}</p>
                   </div>
                 ))
               )}
 
               {/* Add Comment */}
-              <form
-                onSubmit={handleAddComment}
-                className="mt-4"
-              >
-                <label className="form-label">
-                  Add New Comment
-                </label>
+              <form onSubmit={handleAddComment} className="mt-4">
+                <label className="form-label">Add New Comment</label>
 
                 <textarea
                   className="form-control"
                   rows="3"
                   placeholder="Write your comment..."
                   value={newComment}
-                  onChange={(event) =>
-                    setNewComment(event.target.value)
-                  }
+                  onChange={(event) => setNewComment(event.target.value)}
                 />
 
                 <button
@@ -294,15 +272,11 @@ const LeadDetailsView = () => {
                   className="btn btn-success mt-3"
                   disabled={commentLoading}
                 >
-                  {commentLoading
-                    ? "Submitting..."
-                    : "Submit Comment"}
+                  {commentLoading ? "Submitting..." : "Submit Comment"}
                 </button>
               </form>
-
             </div>
           </div>
-
         </div>
       </div>
     </div>
