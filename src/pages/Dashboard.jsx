@@ -8,7 +8,10 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
-  // Fetch leads
+  // --------------------------------
+  // Fetch Leads
+  // --------------------------------
+
   useEffect(() => {
     const fetchLeads = async () => {
       try {
@@ -18,10 +21,10 @@ const Dashboard = () => {
 
         const data = await response.json();
 
-        // console.log("Dashboard Leads API:", data);
+        console.log("Dashboard Leads API:", data);
 
         if (response.ok) {
-          setLeads(data.leads || []);
+          setLeads(Array.isArray(data.leads) ? data.leads : []);
         }
       } catch (error) {
         console.error("Error fetching leads:", error);
@@ -33,15 +36,24 @@ const Dashboard = () => {
     fetchLeads();
   }, []);
 
-  // Lead statuses
+  // --------------------------------
+  // Lead Statuses
+  // --------------------------------
+
   const statuses = ["New", "Contacted", "Qualified", "Proposal Sent", "Closed"];
 
-  // Count leads by status
+  // --------------------------------
+  // Count Leads by Status
+  // --------------------------------
+
   const getStatusCount = (status) => {
     return leads.filter((lead) => lead.status === status).length;
   };
 
-  // Get latest 3 leads
+  // --------------------------------
+  // Get Latest 3 Leads
+  // --------------------------------
+
   const recentLeads = [...leads]
     .sort(
       (a, b) =>
@@ -49,12 +61,18 @@ const Dashboard = () => {
     )
     .slice(0, 3);
 
-  // Quick filter
+  // --------------------------------
+  // Quick Status Filter
+  // --------------------------------
+
   const handleStatusFilter = (status) => {
     navigate(`/leads?status=${encodeURIComponent(status)}`);
   };
 
-  // Loading state
+  // --------------------------------
+  // Loading State
+  // --------------------------------
+
   if (loading) {
     return (
       <div className="container-fluid">
@@ -70,6 +88,10 @@ const Dashboard = () => {
       </div>
     );
   }
+
+  // --------------------------------
+  // Dashboard UI
+  // --------------------------------
 
   return (
     <div className="container-fluid">
@@ -88,7 +110,10 @@ const Dashboard = () => {
             </p>
           </div>
 
+          {/* -------------------------------- */}
           {/* Lead Status Cards */}
+          {/* -------------------------------- */}
+
           <div className="row g-3 mb-4">
             {statuses.map((status) => (
               <div className="col-12 col-sm-6 col-lg" key={status}>
@@ -105,7 +130,10 @@ const Dashboard = () => {
             ))}
           </div>
 
+          {/* -------------------------------- */}
           {/* Quick Filters */}
+          {/* -------------------------------- */}
+
           <div className="card shadow-sm mb-4">
             <div className="card-body">
               <h5 className="mb-3">Quick Filters</h5>
@@ -125,7 +153,10 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* -------------------------------- */}
           {/* Recent Leads */}
+          {/* -------------------------------- */}
+
           <div className="card shadow-sm mb-4">
             <div className="card-header">
               <div className="d-flex justify-content-between align-items-center">
@@ -204,7 +235,10 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* -------------------------------- */}
           {/* Add New Lead */}
+          {/* -------------------------------- */}
+
           <div className="d-grid d-sm-flex">
             <button
               type="button"
