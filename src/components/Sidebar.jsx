@@ -12,8 +12,9 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      {/* Mobile Toggle Button */}
       <button
+        type="button"
         className="btn btn-primary mobile-menu-btn d-md-none"
         onClick={() => setSidebarOpen(!sidebarOpen)}
       >

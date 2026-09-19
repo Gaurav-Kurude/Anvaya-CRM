@@ -7,6 +7,7 @@ const LeadsView = () => {
 
   const [leads, setLeads] = useState([]);
   const [agents, setAgents] = useState([]);
+
   const [statusFilter, setStatusFilter] = useState("");
   const [agentFilter, setAgentFilter] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -65,6 +66,7 @@ const LeadsView = () => {
       return lead.salesAgent?._id === agentFilter;
     })
     .sort((a, b) => {
+      // Sort by priority
       if (sortBy === "priority") {
         const priorityOrder = {
           High: 1,
@@ -72,9 +74,12 @@ const LeadsView = () => {
           Low: 3,
         };
 
-        return priorityOrder[a.priority] - priorityOrder[b.priority];
+        return (
+          (priorityOrder[a.priority] || 99) - (priorityOrder[b.priority] || 99)
+        );
       }
 
+      // Sort by time to close
       if (sortBy === "timeToClose") {
         return a.timeToClose - b.timeToClose;
       }
@@ -82,10 +87,17 @@ const LeadsView = () => {
       return 0;
     });
 
+  // Loading state
   if (loading) {
     return (
-      <div className="container mt-4">
-        <p>Loading leads...</p>
+      <div className="container-fluid">
+        <div className="row min-vh-100">
+          <Sidebar />
+
+          <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
+            <p className="text-muted">Loading leads...</p>
+          </main>
+        </div>
       </div>
     );
   }
@@ -97,11 +109,16 @@ const LeadsView = () => {
         <Sidebar />
 
         {/* Main Content */}
-        <div className="col-md-9 col-lg-10 p-4">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2>Lead List</h2>
+        <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
+          {/* Page Header */}
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+            <div>
+              <h2 className="mb-1">Lead List</h2>
+              <p className="text-muted mb-0">Manage and filter your leads</p>
+            </div>
 
             <button
+              type="button"
               className="btn btn-primary"
               onClick={() => navigate("/leads/new")}
             >
@@ -111,10 +128,14 @@ const LeadsView = () => {
 
           {/* Filters */}
           <div className="card shadow-sm mb-4">
+            <div className="card-header">
+              <h5 className="mb-0">Filters & Sorting</h5>
+            </div>
+
             <div className="card-body">
               <div className="row">
                 {/* Status Filter */}
-                <div className="col-md-4 mb-3">
+                <div className="col-12 col-md-4 mb-3 mb-md-0">
                   <label className="form-label">Filter by Status</label>
 
                   <select
@@ -132,7 +153,7 @@ const LeadsView = () => {
                 </div>
 
                 {/* Sales Agent Filter */}
-                <div className="col-md-4 mb-3">
+                <div className="col-12 col-md-4 mb-3 mb-md-0">
                   <label className="form-label">Filter by Sales Agent</label>
 
                   <select
@@ -151,7 +172,7 @@ const LeadsView = () => {
                 </div>
 
                 {/* Sorting */}
-                <div className="col-md-4 mb-3">
+                <div className="col-12 col-md-4">
                   <label className="form-label">Sort By</label>
 
                   <select
@@ -171,50 +192,71 @@ const LeadsView = () => {
           {/* Lead List */}
           <div className="card shadow-sm">
             <div className="card-header">
-              <h5 className="mb-0">Lead Overview</h5>
+              <div className="d-flex justify-content-between align-items-center">
+                <h5 className="mb-0">Lead Overview</h5>
+
+                <span className="badge text-bg-secondary">
+                  {filteredLeads.length} Leads
+                </span>
+              </div>
             </div>
 
             <div className="card-body p-0">
               {filteredLeads.length === 0 ? (
-                <div className="p-4">
+                <div className="p-4 text-center">
                   <p className="text-muted mb-0">No leads found.</p>
                 </div>
               ) : (
                 <div className="list-group list-group-flush">
                   {filteredLeads.map((lead) => (
                     <div key={lead._id} className="list-group-item p-3">
-                      <div className="row align-items-center">
+                      <div className="row align-items-center g-2">
                         {/* Lead Name */}
-                        <div className="col-md-3">
+                        <div className="col-12 col-sm-6 col-lg-3">
+                          <small className="text-muted d-block">Lead</small>
+
                           <strong>{lead.name}</strong>
                         </div>
 
                         {/* Status */}
-                        <div className="col-md-2">
+                        <div className="col-6 col-sm-3 col-lg-2">
+                          <small className="text-muted d-block">Status</small>
+
                           <span className="badge text-bg-primary">
                             {lead.status}
                           </span>
                         </div>
 
                         {/* Sales Agent */}
-                        <div className="col-md-2">
-                          {lead.salesAgent?.name || "Not Assigned"}
+                        <div className="col-6 col-sm-3 col-lg-2">
+                          <small className="text-muted d-block">
+                            Sales Agent
+                          </small>
+
+                          <span>{lead.salesAgent?.name || "Not Assigned"}</span>
                         </div>
 
                         {/* Priority */}
-                        <div className="col-md-2">
-                          {lead.priority || "Medium"}
+                        <div className="col-6 col-sm-4 col-lg-2">
+                          <small className="text-muted d-block">Priority</small>
+
+                          <span>{lead.priority || "Medium"}</span>
                         </div>
 
                         {/* Time to Close */}
-                        <div className="col-md-2">
-                          <small>{lead.timeToClose} Days</small>
+                        <div className="col-6 col-sm-4 col-lg-2">
+                          <small className="text-muted d-block">
+                            Time to Close
+                          </small>
+
+                          <span>{lead.timeToClose} Days</span>
                         </div>
 
                         {/* View Button */}
-                        <div className="col-md-1">
+                        <div className="col-12 col-sm-4 col-lg-1">
                           <button
-                            className="btn btn-sm btn-outline-primary"
+                            type="button"
+                            className="btn btn-sm btn-outline-primary w-100"
                             onClick={() => navigate(`/leads/${lead._id}`)}
                           >
                             View
@@ -227,7 +269,7 @@ const LeadsView = () => {
               )}
             </div>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );
