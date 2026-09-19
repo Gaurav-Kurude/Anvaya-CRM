@@ -10,6 +10,8 @@ const LeadsView = () => {
 
   const [statusFilter, setStatusFilter] = useState("");
   const [agentFilter, setAgentFilter] = useState("");
+  const [tagFilter, setTagFilter] = useState("");
+  const [sourceFilter, setSourceFilter] = useState("");
   const [sortBy, setSortBy] = useState("");
 
   const [loading, setLoading] = useState(true);
@@ -49,8 +51,12 @@ const LeadsView = () => {
     fetchData();
   }, []);
 
+  // Get unique tags from all leads
+  const availableTags = [...new Set(leads.flatMap((lead) => lead.tags || []))];
+
   // Filter and sort leads
   const filteredLeads = leads
+    // Filter by Status
     .filter((lead) => {
       if (!statusFilter) {
         return true;
@@ -58,6 +64,8 @@ const LeadsView = () => {
 
       return lead.status === statusFilter;
     })
+
+    // Filter by Sales Agent
     .filter((lead) => {
       if (!agentFilter) {
         return true;
@@ -65,8 +73,27 @@ const LeadsView = () => {
 
       return lead.salesAgent?._id === agentFilter;
     })
+
+    // Filter by Lead Source
+    .filter((lead) => {
+      if (!sourceFilter) {
+        return true;
+      }
+
+      return lead.source === sourceFilter;
+    })
+
+    // Filter by Tag
+    .filter((lead) => {
+      if (!tagFilter) {
+        return true;
+      }
+
+      return lead.tags?.includes(tagFilter);
+    })
+
+    // Sort
     .sort((a, b) => {
-      // Sort by priority
       if (sortBy === "priority") {
         const priorityOrder = {
           High: 1,
@@ -79,7 +106,6 @@ const LeadsView = () => {
         );
       }
 
-      // Sort by time to close
       if (sortBy === "timeToClose") {
         return a.timeToClose - b.timeToClose;
       }
@@ -114,6 +140,7 @@ const LeadsView = () => {
           <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
             <div>
               <h2 className="mb-1">Lead List</h2>
+
               <p className="text-muted mb-0">Manage and filter your leads</p>
             </div>
 
@@ -134,8 +161,8 @@ const LeadsView = () => {
 
             <div className="card-body">
               <div className="row">
-                {/* Status Filter */}
-                <div className="col-12 col-md-4 mb-3 mb-md-0">
+                {/* 1. Status Filter */}
+                <div className="col-12 col-md-4 mb-3">
                   <label className="form-label">Filter by Status</label>
 
                   <select
@@ -152,8 +179,8 @@ const LeadsView = () => {
                   </select>
                 </div>
 
-                {/* Sales Agent Filter */}
-                <div className="col-12 col-md-4 mb-3 mb-md-0">
+                {/* 2. Sales Agent Filter */}
+                <div className="col-12 col-md-4 mb-3">
                   <label className="form-label">Filter by Sales Agent</label>
 
                   <select
@@ -171,8 +198,46 @@ const LeadsView = () => {
                   </select>
                 </div>
 
-                {/* Sorting */}
-                <div className="col-12 col-md-4">
+                {/* 3. Lead Source Filter */}
+                <div className="col-12 col-md-4 mb-3">
+                  <label className="form-label">Filter by Lead Source</label>
+
+                  <select
+                    className="form-select"
+                    value={sourceFilter}
+                    onChange={(event) => setSourceFilter(event.target.value)}
+                  >
+                    <option value="">All Sources</option>
+                    <option value="Website">Website</option>
+                    <option value="Referral">Referral</option>
+                    <option value="Cold Call">Cold Call</option>
+                    <option value="Advertisement">Advertisement</option>
+                    <option value="Email">Email</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                {/* 4. Tag Filter */}
+                <div className="col-12 col-md-4 mb-3">
+                  <label className="form-label">Filter by Tag</label>
+
+                  <select
+                    className="form-select"
+                    value={tagFilter}
+                    onChange={(event) => setTagFilter(event.target.value)}
+                  >
+                    <option value="">All Tags</option>
+
+                    {availableTags.map((tag) => (
+                      <option key={tag} value={tag}>
+                        {tag}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* 5. Sort By */}
+                <div className="col-12 col-md-4 mb-3">
                   <label className="form-label">Sort By</label>
 
                   <select
