@@ -7,7 +7,6 @@ const LeadsView = () => {
 
   const [leads, setLeads] = useState([]);
   const [agents, setAgents] = useState([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [agentFilter, setAgentFilter] = useState("");
   const [sortBy, setSortBy] = useState("");
@@ -28,7 +27,11 @@ const LeadsView = () => {
         const leadsData = await leadsResponse.json();
         const agentsData = await agentsResponse.json();
 
+        console.log("Leads API response:", leadsData);
+        console.log("Agents API response:", agentsData);
+
         if (leadsResponse.ok) {
+          console.log("Leads:", leadsData.leads);
           setLeads(leadsData.leads || []);
         }
 
@@ -90,12 +93,6 @@ const LeadsView = () => {
   return (
     <div className="container-fluid">
       <div className="row min-vh-100">
-        <button
-          className="btn btn-primary d-md-none m-3"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-        >
-          ☰
-        </button>
         {/* Sidebar */}
         <Sidebar />
 
