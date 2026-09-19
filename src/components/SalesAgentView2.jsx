@@ -14,7 +14,7 @@ const SalesAgentView = () => {
         const response = await fetch("https://major-project-two-backend-zeta.vercel.app/leads");
         const data = await response.json();
 
-        console.log("Leads API response:", data);
+        // console.log("Leads API response:", data);
 
         if (response.ok) {
           setLeads(Array.isArray(data.leads) ? data.leads : []);

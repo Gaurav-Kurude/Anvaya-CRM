@@ -18,7 +18,7 @@ const LeadStatusView = () => {
 
         const data = await response.json();
 
-        console.log("Leads API response:", data);
+        // console.log("Leads API response:", data);
 
         if (response.ok) {
           setLeads(Array.isArray(data.leads) ? data.leads : []);
@@ -42,7 +42,7 @@ const LeadStatusView = () => {
 
         const data = await response.json();
 
-        console.log("Tags API response:", data);
+        // console.log("Tags API response:", data);
 
         if (response.ok) {
           setTags(Array.isArray(data.tags) ? data.tags : []);

@@ -30,8 +30,8 @@ const LeadsView = () => {
         const leadsData = await leadsResponse.json();
         const agentsData = await agentsResponse.json();
 
-        console.log("Leads API response:", leadsData);
-        console.log("Agents API response:", agentsData);
+        // console.log("Leads API response:", leadsData);
+        // console.log("Agents API response:", agentsData);
 
         if (leadsResponse.ok) {
           console.log("Leads:", leadsData.leads);

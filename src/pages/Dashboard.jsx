@@ -18,7 +18,7 @@ const Dashboard = () => {
 
         const data = await response.json();
 
-        console.log("Dashboard Leads API:", data);
+        // console.log("Dashboard Leads API:", data);
 
         if (response.ok) {
           setLeads(data.leads || []);
