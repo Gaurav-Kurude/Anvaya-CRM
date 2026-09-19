@@ -17,6 +17,7 @@ const LeadsView = () => {
   const [agentFilter, setAgentFilter] = useState("");
   const [tagFilter, setTagFilter] = useState("");
   const [sourceFilter, setSourceFilter] = useState("");
+  const [priorityFilter, setPriorityFilter] = useState("");
   const [sortBy, setSortBy] = useState("");
 
   // Loading
@@ -30,6 +31,7 @@ const LeadsView = () => {
     setAgentFilter(searchParams.get("salesAgent") || "");
     setTagFilter(searchParams.get("tag") || "");
     setSourceFilter(searchParams.get("source") || "");
+    setPriorityFilter(searchParams.get("priority") || "");
     setSortBy(searchParams.get("sort") || "");
   }, [searchParams]);
 
@@ -119,6 +121,15 @@ const LeadsView = () => {
       return lead.salesAgent?._id === agentFilter;
     })
 
+    // Filter by Priority
+    .filter((lead) => {
+      if (!priorityFilter) {
+        return true;
+      }
+
+      return lead.priority === priorityFilter;
+    })
+
     // Filter by Lead Source
     .filter((lead) => {
       if (!sourceFilter) {
@@ -139,6 +150,7 @@ const LeadsView = () => {
 
     // Sort
     .sort((a, b) => {
+      // Sort by Priority
       if (sortBy === "priority") {
         const priorityOrder = {
           High: 1,
@@ -151,6 +163,7 @@ const LeadsView = () => {
         );
       }
 
+      // Sort by Time to Close
       if (sortBy === "timeToClose") {
         return Number(a.timeToClose || 0) - Number(b.timeToClose || 0);
       }
@@ -304,6 +317,27 @@ const LeadsView = () => {
                         {tag}
                       </option>
                     ))}
+                  </select>
+                </div>
+
+                {/* Priority Filter */}
+                <div className="col-12 col-md-4 mb-3">
+                  <label className="form-label">Filter by Priority</label>
+
+                  <select
+                    className="form-select"
+                    value={priorityFilter}
+                    onChange={(event) =>
+                      updateFilter("priority", event.target.value)
+                    }
+                  >
+                    <option value="">All Priorities</option>
+
+                    <option value="High">High</option>
+
+                    <option value="Medium">Medium</option>
+
+                    <option value="Low">Low</option>
                   </select>
                 </div>
 
