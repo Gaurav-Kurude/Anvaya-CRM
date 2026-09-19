@@ -11,8 +11,10 @@ const LeadEditForm = () => {
     name: "",
     source: "",
     status: "New",
+    salesAgent: "",
     priority: "Medium",
     timeToClose: "",
+    tags: [],
   });
 
   const [loading, setLoading] = useState(true);
@@ -32,8 +34,10 @@ const LeadEditForm = () => {
             name: data.lead.name || "",
             source: data.lead.source || "",
             status: data.lead.status || "New",
+            salesAgent: lead.salesAgent?._id || "",
             priority: data.lead.priority || "Medium",
             timeToClose: data.lead.timeToClose || "",
+            tags: lead.tags || [],
           });
         } else {
           toast.error(data.message || "Failed to fetch lead");
@@ -204,6 +208,32 @@ const LeadEditForm = () => {
                     min="1"
                     required
                   />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Tags</label>
+
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter tags separated by commas"
+                    value={formData.tags.join(", ")}
+                    onChange={(event) => {
+                      const tags = event.target.value
+                        .split(",")
+                        .map((tag) => tag.trim())
+                        .filter((tag) => tag !== "");
+
+                      setFormData({
+                        ...formData,
+                        tags,
+                      });
+                    }}
+                  />
+
+                  <small className="text-muted">
+                    Example: High Value, Follow-up, Important
+                  </small>
                 </div>
 
                 {/* Submit */}
