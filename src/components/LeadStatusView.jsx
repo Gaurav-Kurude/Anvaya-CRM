@@ -71,8 +71,8 @@ const LeadStatusView = () => {
         const leadsData = await leadsResponse.json();
         const agentsData = await agentsResponse.json();
 
-        console.log("Lead Status View - Leads:", leadsData);
-        console.log("Lead Status View - Agents:", agentsData);
+        // console.log("Lead Status View - Leads:", leadsData);
+        // console.log("Lead Status View - Agents:", agentsData);
 
         if (leadsResponse.ok) {
           setLeads(Array.isArray(leadsData.leads) ? leadsData.leads : []);
