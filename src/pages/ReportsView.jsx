@@ -19,7 +19,7 @@ ChartJS.register(
   BarElement,
   ArcElement,
   Tooltip,
-  Legend,
+  Legend
 );
 
 const ReportsView = () => {
@@ -30,7 +30,7 @@ const ReportsView = () => {
     const fetchLeads = async () => {
       try {
         const response = await fetch(
-          "https://major-project-two-backend-zeta.vercel.app/leads",
+          "https://major-project-two-backend-zeta.vercel.app/leads"
         );
 
         const data = await response.json();
@@ -69,10 +69,15 @@ const ReportsView = () => {
   // 2. Total Leads in Pipeline
   // --------------------------------
 
-  const pipelineStatuses = ["New", "Contacted", "Qualified", "Proposal Sent"];
+  const pipelineStatuses = [
+    "New",
+    "Contacted",
+    "Qualified",
+    "Proposal Sent",
+  ];
 
   const pipelineData = pipelineStatuses.map(
-    (status) => leads.filter((lead) => lead.status === status).length,
+    (status) => leads.filter((lead) => lead.status === status).length
   );
 
   // --------------------------------
@@ -80,7 +85,9 @@ const ReportsView = () => {
   // --------------------------------
 
   const agentNames = [
-    ...new Set(leads.map((lead) => lead.salesAgent?.name || "Not Assigned")),
+    ...new Set(
+      leads.map((lead) => lead.salesAgent?.name || "Not Assigned")
+    ),
   ];
 
   const agentLeadCounts = agentNames.map(
@@ -88,50 +95,73 @@ const ReportsView = () => {
       leads.filter(
         (lead) =>
           (lead.salesAgent?.name || "Not Assigned") === agentName &&
-          lead.status === "Closed",
-      ).length,
+          lead.status === "Closed"
+      ).length
   );
 
   // --------------------------------
   // 4. Lead Status Distribution
   // --------------------------------
 
-  const statuses = ["New", "Contacted", "Qualified", "Proposal Sent", "Closed"];
+  const statuses = [
+    "New",
+    "Contacted",
+    "Qualified",
+    "Proposal Sent",
+    "Closed",
+  ];
 
   const statusCounts = statuses.map(
-    (status) => leads.filter((lead) => lead.status === status).length,
+    (status) => leads.filter((lead) => lead.status === status).length
   );
 
   // --------------------------------
   // Chart Data
   // --------------------------------
 
+  // 1. Closed Last Week Chart
   const closedLastWeekChartData = {
     labels: ["Closed Last Week"],
     datasets: [
       {
         label: "Closed Leads",
         data: [closedLastWeek.length],
+
+        backgroundColor: "#0d6efd",
+        borderColor: "#ffffff",
+        borderWidth: 2,
       },
     ],
   };
 
+  // 2. Pipeline Chart
   const pipelineChartData = {
     labels: pipelineStatuses,
     datasets: [
       {
         label: "Leads",
         data: pipelineData,
+
+        backgroundColor: [
+          "#0d6efd", // New
+          "#ffc107", // Contacted
+          "#198754", // Qualified
+          "#fd7e14", // Proposal Sent
+        ],
+
+        borderColor: "#ffffff",
+        borderWidth: 2,
       },
     ],
   };
 
+  // 3. Sales Agent Chart
   const agentChartData = {
     labels: agentNames,
     datasets: [
       {
         label: "Closed Leads",
-        data: closedAgentCounts,
+        data: agentLeadCounts,
 
         backgroundColor: [
           "#0d6efd",
@@ -150,10 +180,7 @@ const ReportsView = () => {
     ],
   };
 
-  // --------------------------------
-  // Pie Chart Data
-  // --------------------------------
-
+  // 4. Status Pie Chart
   const statusChartData = {
     labels: statuses,
     datasets: [
@@ -161,7 +188,6 @@ const ReportsView = () => {
         label: "Leads",
         data: statusCounts,
 
-        // Color for each pie chart section
         backgroundColor: [
           "#0d6efd", // New - Blue
           "#ffc107", // Contacted - Yellow
@@ -170,7 +196,6 @@ const ReportsView = () => {
           "#dc3545", // Closed - Red
         ],
 
-        // Border around each pie section
         borderColor: "#ffffff",
         borderWidth: 2,
       },
@@ -228,9 +253,16 @@ const ReportsView = () => {
             </div>
 
             <div className="card-body">
-              <h4>{pipelineData.reduce((total, count) => total + count, 0)}</h4>
+              <h4>
+                {pipelineData.reduce(
+                  (total, count) => total + count,
+                  0
+                )}
+              </h4>
 
-              <p className="text-muted">Leads currently in the pipeline</p>
+              <p className="text-muted">
+                Leads currently in the pipeline
+              </p>
 
               <div
                 style={{
@@ -242,6 +274,11 @@ const ReportsView = () => {
                   data={pipelineChartData}
                   options={{
                     maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        display: false,
+                      },
+                    },
                   }}
                 />
               </div>
@@ -258,10 +295,14 @@ const ReportsView = () => {
             </div>
 
             <div className="card-body">
-              <p className="text-muted">Closed leads grouped by sales agent</p>
+              <p className="text-muted">
+                Closed leads grouped by sales agent
+              </p>
 
               {agentNames.length === 0 ? (
-                <p className="text-muted">No agent data available</p>
+                <p className="text-muted">
+                  No agent data available
+                </p>
               ) : (
                 <div
                   style={{
@@ -273,6 +314,11 @@ const ReportsView = () => {
                     data={agentChartData}
                     options={{
                       maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
+                          display: false,
+                        },
+                      },
                     }}
                   />
                 </div>
@@ -286,7 +332,9 @@ const ReportsView = () => {
 
           <div className="card mb-4">
             <div className="card-header">
-              <h5 className="mb-0">Lead Status Distribution</h5>
+              <h5 className="mb-0">
+                Lead Status Distribution
+              </h5>
             </div>
 
             <div className="card-body">
