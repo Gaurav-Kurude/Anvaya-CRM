@@ -200,7 +200,7 @@ const LeadsView = () => {
         <Sidebar />
 
         {/* Main Content */}
-        <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
+        <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4 dashboard-content">
           {/* Page Header */}
           <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
             <div>
