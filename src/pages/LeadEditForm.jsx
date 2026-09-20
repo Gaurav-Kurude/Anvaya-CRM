@@ -29,7 +29,7 @@ const LeadEditForm = () => {
 
         const data = await response.json();
 
-        console.log("Lead API response:", data);
+        // console.log("Lead API response:", data);
 
         if (response.ok && data.success && data.lead) {
           const lead = data.lead;
