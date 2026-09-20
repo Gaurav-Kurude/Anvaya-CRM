@@ -31,7 +31,7 @@ const LeadEditForm = () => {
 
         console.log("Lead API response:", data);
 
-        if (response.ok) {
+        if (response.ok && data.success && data.lead) {
           const lead = data.lead;
 
           setFormData({
@@ -48,6 +48,8 @@ const LeadEditForm = () => {
         }
       } catch (error) {
         console.error("Error fetching lead:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
