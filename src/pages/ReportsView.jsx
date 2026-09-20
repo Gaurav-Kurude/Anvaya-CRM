@@ -131,7 +131,21 @@ const ReportsView = () => {
     datasets: [
       {
         label: "Closed Leads",
-        data: agentLeadCounts,
+        data: closedAgentCounts,
+
+        backgroundColor: [
+          "#0d6efd",
+          "#198754",
+          "#ffc107",
+          "#dc3545",
+          "#6f42c1",
+          "#fd7e14",
+          "#20c997",
+          "#0dcaf0",
+        ],
+
+        borderColor: "#ffffff",
+        borderWidth: 2,
       },
     ],
   };
