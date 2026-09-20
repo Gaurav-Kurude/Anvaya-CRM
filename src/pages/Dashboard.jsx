@@ -100,7 +100,7 @@ const Dashboard = () => {
         <Sidebar />
 
         {/* Main Content */}
-        <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
+        <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4 dashboard-content">
           {/* Header */}
           <div className="mb-4">
             <h2 className="mb-1">Anvaya CRM Dashboard</h2>

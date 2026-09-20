@@ -238,4 +238,8 @@
   .container-fluid > .row > div:not(.sidebar) {
     padding-top: 60px !important;
   }
+
+  .dashboard-content {
+    padding-top: 70px !important;
+  }
 }
