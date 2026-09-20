@@ -29,24 +29,25 @@ const LeadEditForm = () => {
 
         const data = await response.json();
 
+        console.log("Lead API response:", data);
+
         if (response.ok) {
+          const lead = data.lead;
+
           setFormData({
-            name: data.lead.name || "",
-            source: data.lead.source || "",
-            status: data.lead.status || "New",
+            name: lead.name || "",
+            source: lead.source || "",
             salesAgent: lead.salesAgent?._id || "",
-            priority: data.lead.priority || "Medium",
-            timeToClose: data.lead.timeToClose || "",
+            status: lead.status || "New",
             tags: lead.tags || [],
+            timeToClose: lead.timeToClose || "",
+            priority: lead.priority || "Medium",
           });
         } else {
-          toast.error(data.message || "Failed to fetch lead");
+          console.error("Failed to fetch lead:", data);
         }
       } catch (error) {
         console.error("Error fetching lead:", error);
-        toast.error("Something went wrong");
-      } finally {
-        setLoading(false);
       }
     };
 
