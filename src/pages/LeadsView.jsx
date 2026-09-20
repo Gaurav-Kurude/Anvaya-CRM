@@ -71,7 +71,7 @@ const LeadsView = () => {
 
         // Set leads
         if (leadsResponse.ok) {
-          console.log("Leads:", leadsData.leads);
+          // console.log("Leads:", leadsData.leads);
 
           setLeads(Array.isArray(leadsData.leads) ? leadsData.leads : []);
         }
