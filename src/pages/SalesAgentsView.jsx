@@ -21,7 +21,7 @@ const SalesAgentsView = () => {
 
         const data = await response.json();
 
-        console.log("Sales Agents API response:", data);
+        // console.log("Sales Agents API response:", data);
 
         if (response.ok && data.success) {
           setAgents(Array.isArray(data.agents) ? data.agents : []);
