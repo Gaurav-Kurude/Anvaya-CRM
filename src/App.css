@@ -268,6 +268,17 @@
 }
 
 /* =========================================
+   LEAD LIST SCROLL CONTAINER
+========================================= */
+
+.lead-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================
    LEAD LIST COLUMNS
 ========================================= */
 
@@ -276,39 +287,41 @@
   align-items: center;
   gap: 12px;
   flex-wrap: nowrap;
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
 }
 
 .lead-column {
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .lead-name {
-  flex: 2 1 0;
+  width: 180px;
 }
 
 .lead-status {
-  flex: 1 1 0;
+  width: 120px;
 }
 
 .lead-agent {
-  flex: 1.5 1 0;
+  width: 170px;
 }
 
 .lead-priority {
-  flex: 0.9 1 0;
+  width: 110px;
 }
 
 .lead-tags {
-  flex: 1.6 1 0;
+  width: 170px;
 }
 
 .lead-time {
-  flex: 1.1 1 0;
+  width: 130px;
 }
 
 .lead-action {
-  flex: 0.8 1 0;
+  width: 90px;
 }
 
 .lead-column small {
@@ -491,33 +504,55 @@
      Lead List - Mobile
   ----------------------------------------- */
 
-  .lead-row {
-    display: grid;
+  .lead-scroll-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    grid-template-columns: 1fr 1fr;
+  .lead-row {
+    display: flex;
+    align-items: center;
 
     gap: 15px;
 
-    width: 100%;
+    flex-wrap: nowrap;
+
+    width: max-content;
+    min-width: 900px;
   }
 
   .lead-column {
-    min-width: 0;
-    flex: none;
+    flex-shrink: 0;
   }
 
-  .lead-name,
-  .lead-status,
-  .lead-agent,
-  .lead-priority,
-  .lead-tags,
+  .lead-name {
+    width: 180px;
+  }
+
+  .lead-status {
+    width: 120px;
+  }
+
+  .lead-agent {
+    width: 170px;
+  }
+
+  .lead-priority {
+    width: 110px;
+  }
+
+  .lead-tags {
+    width: 170px;
+  }
+
   .lead-time {
-    width: 100%;
+    width: 130px;
   }
 
   .lead-action {
-    grid-column: 1 / -1;
-    width: 100%;
+    width: 90px;
   }
 
   .lead-column small {

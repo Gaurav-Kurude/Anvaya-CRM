@@ -106,7 +106,6 @@ const LeadsView = () => {
   // Filter and sort leads
   // --------------------------------------------------
   const filteredLeads = leads
-
     // Filter by Status
     .filter((lead) => {
       if (!statusFilter) {
@@ -380,7 +379,8 @@ const LeadsView = () => {
               </div>
             </div>
 
-            <div className="card-body p-0">
+            {/* Horizontal Scroll Container */}
+            <div className="card-body p-0 lead-scroll-container">
               {filteredLeads.length === 0 ? (
                 <div className="p-4 text-center">
                   <p className="text-muted mb-0">No leads found.</p>
