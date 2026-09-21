@@ -387,21 +387,54 @@ const LeadsView = () => {
                 </div>
               ) : (
                 <div className="list-group list-group-flush">
+                  {/* =================================
+                      COLUMN HEADERS
+                  ================================= */}
+                  <div className="list-group-item p-3 bg-light">
+                    <div className="lead-row lead-header">
+                      <div className="lead-column lead-name">
+                        <strong>Lead</strong>
+                      </div>
+
+                      <div className="lead-column lead-status">
+                        <strong>Status</strong>
+                      </div>
+
+                      <div className="lead-column lead-agent">
+                        <strong>Sales Agent</strong>
+                      </div>
+
+                      <div className="lead-column lead-priority">
+                        <strong>Priority</strong>
+                      </div>
+
+                      <div className="lead-column lead-tags">
+                        <strong>Tags</strong>
+                      </div>
+
+                      <div className="lead-column lead-time">
+                        <strong>Time to Close</strong>
+                      </div>
+
+                      <div className="lead-column lead-action">
+                        <strong>View</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* =================================
+                      LEAD ROWS
+                  ================================= */}
                   {filteredLeads.map((lead) => (
                     <div key={lead._id} className="list-group-item p-3">
-                      {/* One Row */}
                       <div className="lead-row">
                         {/* Lead Name */}
                         <div className="lead-column lead-name">
-                          <small className="text-muted d-block">Lead</small>
-
                           <strong>{lead.name}</strong>
                         </div>
 
                         {/* Status */}
                         <div className="lead-column lead-status">
-                          <small className="text-muted d-block">Status</small>
-
                           <span className="badge text-bg-primary">
                             {lead.status}
                           </span>
@@ -409,26 +442,16 @@ const LeadsView = () => {
 
                         {/* Sales Agent */}
                         <div className="lead-column lead-agent">
-                          <small className="text-muted d-block">
-                            Sales Agent
-                          </small>
-
                           <span>{lead.salesAgent?.name || "Not Assigned"}</span>
                         </div>
 
                         {/* Priority */}
                         <div className="lead-column lead-priority">
-                          <small className="text-muted d-block">Priority</small>
-
                           <span>{lead.priority || "Medium"}</span>
                         </div>
 
                         {/* Tags */}
                         <div className="lead-column lead-tags">
-                          <small className="text-muted d-block mb-1">
-                            Tags
-                          </small>
-
                           {lead.tags && lead.tags.length > 0 ? (
                             lead.tags.map((tag) => (
                               <span
@@ -445,10 +468,6 @@ const LeadsView = () => {
 
                         {/* Time to Close */}
                         <div className="lead-column lead-time">
-                          <small className="text-muted d-block">
-                            Time to Close
-                          </small>
-
                           <span>{lead.timeToClose} Days</span>
                         </div>
 
