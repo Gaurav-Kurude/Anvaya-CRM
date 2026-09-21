@@ -17,8 +17,15 @@ const LeadEditForm = () => {
     tags: [],
   });
 
+  // Used for entering comma-separated tags
+  const [tagsInput, setTagsInput] = useState("");
+
+  // Sales agents
   const [agents, setAgents] = useState([]);
+
+  // Loading and error states
   const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
   const [error, setError] = useState("");
 
   // Fetch lead and sales agents
@@ -40,13 +47,12 @@ const LeadEditForm = () => {
         const leadData = await leadResponse.json();
         const agentsData = await agentsResponse.json();
 
-        console.log("Lead API response:", leadData);
-        console.log("Agents API response:", agentsData);
-
+        // Check lead API
         if (!leadResponse.ok) {
           throw new Error(leadData.message || "Failed to fetch lead.");
         }
 
+        // Check sales agents API
         if (!agentsResponse.ok) {
           throw new Error(
             agentsData.message || "Failed to fetch sales agents.",
@@ -59,16 +65,24 @@ const LeadEditForm = () => {
           throw new Error("Lead data not found.");
         }
 
+        // Get current sales agent ID
+        const currentSalesAgent = lead.salesAgent?._id || lead.salesAgent || "";
+
+        // Set lead data
         setFormData({
           name: lead.name || "",
           source: lead.source || "",
-          salesAgent: lead.salesAgent?._id || lead.salesAgent || "",
           status: lead.status || "New",
+          salesAgent: currentSalesAgent,
           priority: lead.priority || "Medium",
           timeToClose: lead.timeToClose || "",
           tags: Array.isArray(lead.tags) ? lead.tags : [],
         });
 
+        // Convert tags array into comma-separated string
+        setTagsInput(Array.isArray(lead.tags) ? lead.tags.join(", ") : "");
+
+        // Set sales agents
         setAgents(Array.isArray(agentsData.agents) ? agentsData.agents : []);
       } catch (error) {
         console.error("Error fetching edit lead data:", error);
@@ -96,7 +110,21 @@ const LeadEditForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Check Sales Agent
+    if (!formData.salesAgent) {
+      toast.error("Please select a sales agent.");
+      return;
+    }
+
     try {
+      setUpdating(true);
+
+      // Convert comma-separated tags into an array
+      const tags = tagsInput
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag !== "");
+
       const response = await fetch(
         `https://major-project-two-backend-zeta.vercel.app/leads/${leadId}`,
         {
@@ -105,8 +133,13 @@ const LeadEditForm = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            ...formData,
+            name: formData.name,
+            source: formData.source,
+            salesAgent: formData.salesAgent,
+            status: formData.status,
+            priority: formData.priority,
             timeToClose: Number(formData.timeToClose),
+            tags,
           }),
         },
       );
@@ -118,12 +151,14 @@ const LeadEditForm = () => {
 
         navigate(`/leads/${leadId}`);
       } else {
-        toast.error(data.message || "Failed to update lead");
+        toast.error(data.message || "Failed to update lead.");
       }
     } catch (error) {
       console.error("Error updating lead:", error);
 
-      toast.error("Something went wrong");
+      toast.error("Something went wrong while updating the lead.");
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -152,6 +187,7 @@ const LeadEditForm = () => {
           <div className="col-12 col-md-9 col-lg-10 p-4">
             <div className="alert alert-danger">
               <h5>Unable to load lead</h5>
+
               <p className="mb-0">{error}</p>
             </div>
 
@@ -232,11 +268,17 @@ const LeadEditForm = () => {
                   >
                     <option value="">Select Sales Agent</option>
 
-                    {agents.map((agent) => (
-                      <option key={agent._id} value={agent._id}>
-                        {agent.name} - {agent.email}
+                    {agents.length > 0 ? (
+                      agents.map((agent) => (
+                        <option key={agent._id} value={agent._id}>
+                          {agent.name} - {agent.email}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        No sales agents available
                       </option>
-                    ))}
+                    )}
                   </select>
                 </div>
 
@@ -251,9 +293,13 @@ const LeadEditForm = () => {
                     onChange={handleChange}
                   >
                     <option value="New">New</option>
+
                     <option value="Contacted">Contacted</option>
+
                     <option value="Qualified">Qualified</option>
+
                     <option value="Proposal Sent">Proposal Sent</option>
+
                     <option value="Closed">Closed</option>
                   </select>
                 </div>
@@ -269,7 +315,9 @@ const LeadEditForm = () => {
                     onChange={handleChange}
                   >
                     <option value="High">High</option>
+
                     <option value="Medium">Medium</option>
+
                     <option value="Low">Low</option>
                   </select>
                 </div>
@@ -297,17 +345,9 @@ const LeadEditForm = () => {
                     type="text"
                     className="form-control"
                     placeholder="Enter tags separated by commas"
-                    value={formData.tags.join(", ")}
+                    value={tagsInput}
                     onChange={(event) => {
-                      const tags = event.target.value
-                        .split(",")
-                        .map((tag) => tag.trim())
-                        .filter((tag) => tag !== "");
-
-                      setFormData((previousData) => ({
-                        ...previousData,
-                        tags,
-                      }));
+                      setTagsInput(event.target.value);
                     }}
                   />
 
@@ -316,15 +356,20 @@ const LeadEditForm = () => {
                   </small>
                 </div>
 
-                {/* Submit */}
-                <button type="submit" className="btn btn-primary">
-                  Update Lead
+                {/* Buttons */}
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={updating}
+                >
+                  {updating ? "Updating..." : "Update Lead"}
                 </button>
 
                 <button
                   type="button"
                   className="btn btn-secondary ms-2"
                   onClick={() => navigate(`/leads/${leadId}`)}
+                  disabled={updating}
                 >
                   Cancel
                 </button>
