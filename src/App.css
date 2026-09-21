@@ -191,6 +191,58 @@
   display: none;
 }
 
+.lead-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.lead-column {
+  min-width: 0;
+}
+
+/* Lead Name */
+.lead-name {
+  flex: 2 1 0;
+}
+
+/* Status */
+.lead-status {
+  flex: 1 1 0;
+}
+
+/* Sales Agent */
+.lead-agent {
+  flex: 1.5 1 0;
+}
+
+/* Priority */
+.lead-priority {
+  flex: 0.9 1 0;
+}
+
+/* Tags */
+.lead-tags {
+  flex: 1.6 1 0;
+}
+
+/* Time to Close */
+.lead-time {
+  flex: 1.1 1 0;
+}
+
+/* View Button */
+.lead-action {
+  flex: 0.8 1 0;
+}
+
+/* Keep column headings on one line */
+.lead-column small {
+  white-space: nowrap;
+}
+
 @media (max-width: 767.98px) {
   .mobile-menu-btn {
     display: flex;
@@ -241,5 +293,55 @@
 
   .dashboard-content {
     padding-top: 70px !important;
+  }
+
+  /* Smaller buttons on mobile */
+  button.btn:not(.mobile-menu-btn) {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  /* =========================================
+     LEAD LIST - MOBILE
+  ========================================= */
+
+  .lead-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+
+    width: 100%;
+  }
+
+  .lead-column {
+    min-width: 0;
+    flex: none;
+  }
+
+  .lead-name,
+  .lead-status,
+  .lead-agent,
+  .lead-priority,
+  .lead-tags,
+  .lead-time {
+    width: 100%;
+  }
+
+  /* View button takes full row */
+  .lead-action {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  /* Keep headings in one line */
+  .lead-column small {
+    white-space: nowrap;
+  }
+
+  /* Tags can wrap */
+  .lead-tags {
+    overflow-wrap: break-word;
   }
 }

@@ -58,6 +58,7 @@ const LeadsView = () => {
       try {
         const [leadsResponse, agentsResponse] = await Promise.all([
           fetch("https://major-project-two-backend-zeta.vercel.app/leads"),
+
           fetch(
             "https://major-project-two-backend-zeta.vercel.app/sales-agents",
           ),
@@ -105,6 +106,7 @@ const LeadsView = () => {
   // Filter and sort leads
   // --------------------------------------------------
   const filteredLeads = leads
+
     // Filter by Status
     .filter((lead) => {
       if (!statusFilter) {
@@ -367,6 +369,7 @@ const LeadsView = () => {
 
           {/* Lead List */}
           <div className="card shadow-sm">
+            {/* Lead List Header */}
             <div className="card-header">
               <div className="d-flex justify-content-between align-items-center">
                 <h5 className="mb-0">Lead Overview</h5>
@@ -386,16 +389,17 @@ const LeadsView = () => {
                 <div className="list-group list-group-flush">
                   {filteredLeads.map((lead) => (
                     <div key={lead._id} className="list-group-item p-3">
-                      <div className="row align-items-center g-3">
+                      {/* One Row */}
+                      <div className="lead-row">
                         {/* Lead Name */}
-                        <div className="col-12 col-sm-6 col-lg-3">
+                        <div className="lead-column lead-name">
                           <small className="text-muted d-block">Lead</small>
 
                           <strong>{lead.name}</strong>
                         </div>
 
                         {/* Status */}
-                        <div className="col-6 col-sm-3 col-lg-2">
+                        <div className="lead-column lead-status">
                           <small className="text-muted d-block">Status</small>
 
                           <span className="badge text-bg-primary">
@@ -404,7 +408,7 @@ const LeadsView = () => {
                         </div>
 
                         {/* Sales Agent */}
-                        <div className="col-6 col-sm-3 col-lg-2">
+                        <div className="lead-column lead-agent">
                           <small className="text-muted d-block">
                             Sales Agent
                           </small>
@@ -413,14 +417,14 @@ const LeadsView = () => {
                         </div>
 
                         {/* Priority */}
-                        <div className="col-6 col-sm-4 col-lg-2">
+                        <div className="lead-column lead-priority">
                           <small className="text-muted d-block">Priority</small>
 
                           <span>{lead.priority || "Medium"}</span>
                         </div>
 
                         {/* Tags */}
-                        <div className="col-12 col-sm-6 col-lg-2">
+                        <div className="lead-column lead-tags">
                           <small className="text-muted d-block mb-1">
                             Tags
                           </small>
@@ -440,7 +444,7 @@ const LeadsView = () => {
                         </div>
 
                         {/* Time to Close */}
-                        <div className="col-6 col-sm-4 col-lg-2">
+                        <div className="lead-column lead-time">
                           <small className="text-muted d-block">
                             Time to Close
                           </small>
@@ -449,7 +453,7 @@ const LeadsView = () => {
                         </div>
 
                         {/* View Button */}
-                        <div className="col-12 col-sm-4 col-lg-1">
+                        <div className="lead-column lead-action">
                           <button
                             type="button"
                             className="btn btn-sm btn-outline-primary w-100"
