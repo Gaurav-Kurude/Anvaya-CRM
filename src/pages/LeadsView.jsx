@@ -66,22 +66,24 @@ const LeadsView = () => {
         const leadsData = await leadsResponse.json();
         const agentsData = await agentsResponse.json();
 
-        // console.log("Leads API response:", leadsData);
-        // console.log("Agents API response:", agentsData);
-
         // Set leads
         if (leadsResponse.ok) {
-          // console.log("Leads:", leadsData.leads);
-
           setLeads(Array.isArray(leadsData.leads) ? leadsData.leads : []);
+        } else {
+          setLeads([]);
         }
 
         // Set sales agents
         if (agentsResponse.ok) {
           setAgents(Array.isArray(agentsData.agents) ? agentsData.agents : []);
+        } else {
+          setAgents([]);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+
+        setLeads([]);
+        setAgents([]);
       } finally {
         setLoading(false);
       }
@@ -180,7 +182,7 @@ const LeadsView = () => {
         <div className="row min-vh-100">
           <Sidebar />
 
-          <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
+          <main className="col-12 col-md-9 col-lg-10 p-3 p-md-4 dashboard-content">
             <div className="d-flex justify-content-center align-items-center py-5">
               <p className="text-muted mb-0">Loading leads...</p>
             </div>
@@ -415,6 +417,26 @@ const LeadsView = () => {
                           <small className="text-muted d-block">Priority</small>
 
                           <span>{lead.priority || "Medium"}</span>
+                        </div>
+
+                        {/* Tags */}
+                        <div className="col-12 col-sm-6 col-lg-2">
+                          <small className="text-muted d-block mb-1">
+                            Tags
+                          </small>
+
+                          {lead.tags && lead.tags.length > 0 ? (
+                            lead.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="badge bg-secondary me-1 mb-1"
+                              >
+                                {tag}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-muted">No tags</span>
+                          )}
                         </div>
 
                         {/* Time to Close */}
