@@ -9,9 +9,7 @@ const SalesAgentsView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // --------------------------------------------------
   // Fetch Sales Agents
-  // --------------------------------------------------
   useEffect(() => {
     const fetchAgents = async () => {
       try {
@@ -28,7 +26,6 @@ const SalesAgentsView = () => {
           setAgents(Array.isArray(data.agents) ? data.agents : []);
         } else {
           setAgents([]);
-
           setError(data.message || "Failed to fetch sales agents.");
         }
       } catch (error) {
@@ -44,9 +41,7 @@ const SalesAgentsView = () => {
     fetchAgents();
   }, []);
 
-  // --------------------------------------------------
   // Open leads for a particular sales agent
-  // --------------------------------------------------
   const handleViewLeads = (agentId) => {
     navigate(`/sales-agents/leads?agentId=${agentId}`);
   };
@@ -93,9 +88,9 @@ const SalesAgentsView = () => {
               <div>
                 {agents.map((agent) => (
                   <div key={agent._id} className="border rounded p-3 mb-3">
-                    <div className="d-flex justify-content-between align-items-center flex-nowrap gap-3">
+                    <div className="agent-row">
                       {/* Agent Information */}
-                      <div>
+                      <div className="agent-info">
                         <h5 className="mb-1">{agent.name}</h5>
 
                         <p className="mb-0 text-muted">{agent.email}</p>
@@ -104,7 +99,7 @@ const SalesAgentsView = () => {
                       {/* View Leads Button */}
                       <button
                         type="button"
-                        className="btn btn-outline-primary btn-sm"
+                        className="btn btn-outline-primary btn-sm view-leads-btn"
                         onClick={() => handleViewLeads(agent._id)}
                       >
                         View Leads
