@@ -17,43 +17,69 @@ const LeadEditForm = () => {
     tags: [],
   });
 
+  const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // Fetch lead details
+  // Fetch lead and sales agents
   useEffect(() => {
-    const fetchLead = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://major-project-two-backend-zeta.vercel.app/leads/${leadId}`,
-        );
+        setLoading(true);
+        setError("");
 
-        const data = await response.json();
+        const [leadResponse, agentsResponse] = await Promise.all([
+          fetch(
+            `https://major-project-two-backend-zeta.vercel.app/leads/${leadId}`,
+          ),
+          fetch(
+            "https://major-project-two-backend-zeta.vercel.app/sales-agents",
+          ),
+        ]);
 
-        // console.log("Lead API response:", data);
+        const leadData = await leadResponse.json();
+        const agentsData = await agentsResponse.json();
 
-        if (response.ok && data.success && data.lead) {
-          const lead = data.lead;
+        console.log("Lead API response:", leadData);
+        console.log("Agents API response:", agentsData);
 
-          setFormData({
-            name: lead.name || "",
-            source: lead.source || "",
-            salesAgent: lead.salesAgent?._id || "",
-            status: lead.status || "New",
-            tags: lead.tags || [],
-            timeToClose: lead.timeToClose || "",
-            priority: lead.priority || "Medium",
-          });
-        } else {
-          console.error("Failed to fetch lead:", data);
+        if (!leadResponse.ok) {
+          throw new Error(leadData.message || "Failed to fetch lead.");
         }
+
+        if (!agentsResponse.ok) {
+          throw new Error(
+            agentsData.message || "Failed to fetch sales agents.",
+          );
+        }
+
+        const lead = leadData.lead;
+
+        if (!lead) {
+          throw new Error("Lead data not found.");
+        }
+
+        setFormData({
+          name: lead.name || "",
+          source: lead.source || "",
+          salesAgent: lead.salesAgent?._id || lead.salesAgent || "",
+          status: lead.status || "New",
+          priority: lead.priority || "Medium",
+          timeToClose: lead.timeToClose || "",
+          tags: Array.isArray(lead.tags) ? lead.tags : [],
+        });
+
+        setAgents(Array.isArray(agentsData.agents) ? agentsData.agents : []);
       } catch (error) {
-        console.error("Error fetching lead:", error);
+        console.error("Error fetching edit lead data:", error);
+
+        setError(error.message || "Failed to load lead.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchLead();
+    fetchData();
   }, [leadId]);
 
   // Handle input changes
@@ -89,12 +115,14 @@ const LeadEditForm = () => {
 
       if (response.ok) {
         toast.success("Lead updated successfully!");
+
         navigate(`/leads/${leadId}`);
       } else {
         toast.error(data.message || "Failed to update lead");
       }
     } catch (error) {
       console.error("Error updating lead:", error);
+
       toast.error("Something went wrong");
     }
   };
@@ -104,12 +132,35 @@ const LeadEditForm = () => {
     return (
       <div className="container-fluid">
         <div className="row">
-          {/* Sidebar */}
           <Sidebar />
 
-          {/* Main Content */}
-          <div className="col-md-9 col-lg-10 p-4">
+          <div className="col-12 col-md-9 col-lg-10 p-4">
             <p>Loading lead...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="container-fluid">
+        <div className="row">
+          <Sidebar />
+
+          <div className="col-12 col-md-9 col-lg-10 p-4">
+            <div className="alert alert-danger">
+              <h5>Unable to load lead</h5>
+              <p className="mb-0">{error}</p>
+            </div>
+
+            <button
+              className="btn btn-secondary mt-3"
+              onClick={() => navigate("/leads")}
+            >
+              Back to Leads
+            </button>
           </div>
         </div>
       </div>
@@ -119,17 +170,15 @@ const LeadEditForm = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        {/* Sidebar */}
         <Sidebar />
 
-        {/* Main Content */}
-        <div className="col-md-9 col-lg-10 p-4">
+        <div className="col-12 col-md-9 col-lg-10 p-4">
           <div className="card shadow-sm">
             <div className="card-body">
               <h2 className="mb-4">Edit Lead</h2>
 
               <form onSubmit={handleSubmit}>
-                {/* Name */}
+                {/* Lead Name */}
                 <div className="mb-3">
                   <label className="form-label">Lead Name</label>
 
@@ -143,7 +192,7 @@ const LeadEditForm = () => {
                   />
                 </div>
 
-                {/* Source */}
+                {/* Lead Source */}
                 <div className="mb-3">
                   <label className="form-label">Lead Source</label>
 
@@ -155,12 +204,39 @@ const LeadEditForm = () => {
                     required
                   >
                     <option value="">Select Source</option>
+
                     <option value="Website">Website</option>
+
                     <option value="Referral">Referral</option>
+
                     <option value="Cold Call">Cold Call</option>
+
                     <option value="Advertisement">Advertisement</option>
+
                     <option value="Email">Email</option>
+
                     <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                {/* Sales Agent */}
+                <div className="mb-3">
+                  <label className="form-label">Sales Agent</label>
+
+                  <select
+                    className="form-select"
+                    name="salesAgent"
+                    value={formData.salesAgent}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Sales Agent</option>
+
+                    {agents.map((agent) => (
+                      <option key={agent._id} value={agent._id}>
+                        {agent.name} - {agent.email}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -213,6 +289,7 @@ const LeadEditForm = () => {
                   />
                 </div>
 
+                {/* Tags */}
                 <div className="mb-3">
                   <label className="form-label">Tags</label>
 
@@ -227,10 +304,10 @@ const LeadEditForm = () => {
                         .map((tag) => tag.trim())
                         .filter((tag) => tag !== "");
 
-                      setFormData({
-                        ...formData,
+                      setFormData((previousData) => ({
+                        ...previousData,
                         tags,
-                      });
+                      }));
                     }}
                   />
 
@@ -242,6 +319,14 @@ const LeadEditForm = () => {
                 {/* Submit */}
                 <button type="submit" className="btn btn-primary">
                   Update Lead
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-secondary ms-2"
+                  onClick={() => navigate(`/leads/${leadId}`)}
+                >
+                  Cancel
                 </button>
               </form>
             </div>
