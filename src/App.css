@@ -481,3 +481,9 @@
     overflow-wrap: break-word;
   }
 }
+
+@media (min-width: 454px){
+  .gaurav{
+    justify-content: space-between;
+  }
+}
