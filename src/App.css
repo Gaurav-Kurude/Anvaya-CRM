@@ -11,6 +11,7 @@
   &:hover {
     border-color: var(--accent-border);
   }
+
   &:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
@@ -78,6 +79,7 @@
   & > div {
     flex: 1 1 0;
     padding: 32px;
+
     @media (max-width: 1024px) {
       padding: 24px 20px;
     }
@@ -130,6 +132,7 @@
     &:hover {
       box-shadow: var(--shadow);
     }
+
     .button-icon {
       height: 18px;
       width: 18px;
@@ -156,6 +159,7 @@
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
+
   @media (max-width: 1024px) {
     height: 48px;
   }
@@ -177,6 +181,7 @@
     left: 0;
     border-left-color: var(--border);
   }
+
   &::after {
     right: 0;
     border-right-color: var(--border);
@@ -184,45 +189,110 @@
 }
 
 /* =========================================
-    SIDEBAR
- ========================================= */
+   SIDEBAR
+========================================= */
 
 .sidebar {
   transition: transform 0.3s ease;
 }
 
 /* =========================================
-    MOBILE MENU BUTTON
- ========================================= */
+   MOBILE MENU BUTTON
+========================================= */
 
 .mobile-menu-btn {
   display: none;
 }
 
 /* =========================================
-    SALES AGENT HEADER
- ========================================= */
+   SALES AGENT HEADER
+========================================= */
 
 .sales-agent-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   gap: 12px;
+  width: 100%;
+  min-width: 0;
+
   flex-wrap: nowrap;
 }
 
 .sales-agent-title {
   font-size: 28px;
+  margin: 0;
+
+  min-width: 0;
+
+  flex: 1 1 auto;
+
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sales-agent-add-btn {
   white-space: nowrap;
+
+  flex: 0 0 auto;
 }
 
 /* =========================================
-    MOBILE VIEW
- ========================================= */
+   LEAD LIST COLUMNS
+========================================= */
+
+.lead-row {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  flex-wrap: nowrap;
+
+  width: 100%;
+}
+
+.lead-column {
+  min-width: 0;
+}
+
+.lead-name {
+  flex: 2 1 0;
+}
+
+.lead-status {
+  flex: 1 1 0;
+}
+
+.lead-agent {
+  flex: 1.5 1 0;
+}
+
+.lead-priority {
+  flex: 0.9 1 0;
+}
+
+.lead-tags {
+  flex: 1.6 1 0;
+}
+
+.lead-time {
+  flex: 1.1 1 0;
+}
+
+.lead-action {
+  flex: 0.8 1 0;
+}
+
+.lead-column small {
+  white-space: nowrap;
+}
+
+/* =========================================
+   MOBILE VIEW
+========================================= */
 
 @media (max-width: 767.98px) {
   /* -----------------------------------------
@@ -233,6 +303,7 @@
     display: flex;
 
     position: fixed;
+
     top: 10px;
     left: 10px;
 
@@ -307,31 +378,52 @@
     align-items: center;
     justify-content: space-between;
 
-    flex-wrap: nowrap;
+    width: 100%;
+    min-width: 0;
 
-    gap: 8px;
+    gap: 6px;
+
+    flex-wrap: nowrap;
   }
 
-  /* Medium-sized heading */
-  .sales-agent-title {
-    font-size: 20px;
+  /* Sales Agent Management heading */
 
-    white-space: nowrap;
+  .sales-agent-title {
+    font-size: 18px;
+
+    line-height: 1.2;
 
     margin: 0;
 
-    flex-shrink: 1;
+    min-width: 0;
+
+    flex: 1 1 auto;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
   }
 
-  /* Small Add New Agent button */
-  .sales-agent-add-btn {
-    font-size: 14px;
+  /* Add New Agent button */
 
-    padding: 6px 10px;
+  .sales-agent-add-btn {
+    font-size: 12px;
+
+    padding: 5px 7px;
+
+    line-height: 1.2;
 
     white-space: nowrap;
 
-    flex-shrink: 0;
+    flex: 0 0 auto;
+
+    max-width: 110px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
   }
 
   /* -----------------------------------------
@@ -340,6 +432,52 @@
 
   button.btn:not(.mobile-menu-btn) {
     font-size: 14px;
+
     padding: 6px 10px;
+
+    max-width: 100%;
+  }
+
+  /* -----------------------------------------
+     Lead List - Mobile
+  ----------------------------------------- */
+
+  .lead-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+
+    width: 100%;
+  }
+
+  .lead-column {
+    min-width: 0;
+
+    flex: none;
+  }
+
+  .lead-name,
+  .lead-status,
+  .lead-agent,
+  .lead-priority,
+  .lead-tags,
+  .lead-time {
+    width: 100%;
+  }
+
+  .lead-action {
+    grid-column: 1 / -1;
+
+    width: 100%;
+  }
+
+  .lead-column small {
+    white-space: nowrap;
+  }
+
+  .lead-tags {
+    overflow-wrap: break-word;
   }
 }
