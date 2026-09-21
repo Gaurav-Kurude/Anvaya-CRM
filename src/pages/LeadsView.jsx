@@ -211,7 +211,7 @@ const LeadsView = () => {
 
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-primary btn-sm"
               onClick={() => navigate("/leads/new")}
             >
               Add New Lead
