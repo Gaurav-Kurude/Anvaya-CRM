@@ -93,7 +93,7 @@ const SalesAgentsView = () => {
               <div>
                 {agents.map((agent) => (
                   <div key={agent._id} className="border rounded p-3 mb-3">
-                    <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div className="d-flex justify-content-between align-items-center flex-nowrap gap-3">
                       {/* Agent Information */}
                       <div>
                         <h5 className="mb-1">{agent.name}</h5>
