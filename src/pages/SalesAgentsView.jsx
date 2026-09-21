@@ -56,11 +56,11 @@ const SalesAgentsView = () => {
         <div className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
           <div className="border rounded p-4">
             {/* Header */}
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
               <h2 className="mb-0">Sales Agent Management</h2>
 
               <button
-                className="btn btn-primary"
+                className="btn btn-primary btn-sm"
                 onClick={() => navigate("/sales-agents/new")}
               >
                 Add New Agent
@@ -97,7 +97,7 @@ const SalesAgentsView = () => {
 
                       {/* View Leads Button */}
                       <button
-                        className="btn btn-outline-primary"
+                        className="btn btn-outline-primary btn-sm"
                         onClick={() => handleViewLeads(agent._id)}
                       >
                         View Leads
