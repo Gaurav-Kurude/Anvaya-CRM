@@ -9,6 +9,9 @@ const SalesAgentsView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // --------------------------------------------------
+  // Fetch Sales Agents
+  // --------------------------------------------------
   useEffect(() => {
     const fetchAgents = async () => {
       try {
@@ -41,7 +44,9 @@ const SalesAgentsView = () => {
     fetchAgents();
   }, []);
 
+  // --------------------------------------------------
   // Open leads for a particular sales agent
+  // --------------------------------------------------
   const handleViewLeads = (agentId) => {
     navigate(`/sales-agents/leads?agentId=${agentId}`);
   };
@@ -53,14 +58,15 @@ const SalesAgentsView = () => {
         <Sidebar />
 
         {/* Main Content */}
-        <div className="col-12 col-md-9 col-lg-10 p-3 p-md-4">
+        <div className="col-12 col-md-9 col-lg-10 p-3 p-md-4 dashboard-content">
           <div className="border rounded p-4">
             {/* Header */}
-            <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-              <h2 className="mb-0">Sales Agent Management</h2>
+            <div className="sales-agent-header">
+              <h2 className="sales-agent-title mb-0">Sales Agent Management</h2>
 
               <button
-                className="btn btn-primary btn-sm"
+                type="button"
+                className="btn btn-primary btn-sm sales-agent-add-btn"
                 onClick={() => navigate("/sales-agents/new")}
               >
                 Add New Agent
@@ -97,6 +103,7 @@ const SalesAgentsView = () => {
 
                       {/* View Leads Button */}
                       <button
+                        type="button"
                         className="btn btn-outline-primary btn-sm"
                         onClick={() => handleViewLeads(agent._id)}
                       >
