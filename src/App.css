@@ -484,6 +484,7 @@
 
 @media (min-width: 453px){
   .gaurav{
+    align-items: center;
     justify-content: space-between;
   }
 }
