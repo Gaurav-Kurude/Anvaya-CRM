@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import Sidebar from "../components/Sidebar";
 
 const LeadDetailsView = () => {
@@ -125,21 +125,11 @@ const LeadDetailsView = () => {
         },
       );
 
-      const data = await response.json();
-
       if (response.ok) {
-        toast.success("Lead deleted successfully!");
-
-        setTimeout(() => {
-          navigate("/leads");
-        }, 1000);
-      } else {
-        toast.error(data.message || "Failed to delete lead.");
+        navigate("/leads");
       }
     } catch (error) {
       console.error("Error deleting lead:", error);
-
-      toast.error("Something went wrong while deleting the lead.");
     } finally {
       setDeleting(false);
     }
