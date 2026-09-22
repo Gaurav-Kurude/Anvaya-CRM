@@ -115,14 +115,6 @@ const LeadDetailsView = () => {
 
   // Delete lead
   const handleDeleteLead = async () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this lead?",
-    );
-
-    if (!confirmDelete) {
-      return;
-    }
-
     try {
       setDeleting(true);
 
@@ -138,13 +130,15 @@ const LeadDetailsView = () => {
       if (response.ok) {
         toast.success("Lead deleted successfully!");
 
-        // Go back to Leads page
-        navigate("/leads");
+        setTimeout(() => {
+          navigate("/leads");
+        }, 1000);
       } else {
         toast.error(data.message || "Failed to delete lead.");
       }
     } catch (error) {
       console.error("Error deleting lead:", error);
+
       toast.error("Something went wrong while deleting the lead.");
     } finally {
       setDeleting(false);
